@@ -1,60 +1,74 @@
 //==========Funcion principal==============
 Algoritmo PROYECTO1
 	Definir tipo_de_sobre Como Entero
-	Definir opcion_de_menu Como Entero
-	Definir nombre Como Cadena
-	
+	Definir opcion_de_menu, cantidad_cartas Como Entero
+	Definir nombre, confirmacion Como Cadena
+	cantidad_cartas <- 0
 	Escribir "Ingrese su Usuario:"
 	Leer nombre
-	Escribir "      __  __  _____  ____  ____  ____         +==========================================+"
-	Escribir "     (  \/  )(  _  )/ ___)/ ___)(_  _)        |       ALBUM DIGITAL - FIFA 2026          |"
-	Escribir "      )    (  )(_)( \___ \\___ \  )(          |       Jugador activo: " + nombre +"      |"
-	Escribir "     (_/\/\_)(_____)(____/(____/ (__)         +==========================================+"
-	Escribir "                                              |                                          |"
-	Escribir "      L E O      M E S S I                    |   1. Abrir sobre de figuritas            |        __    ___ "
-	Escribir "      @@@@@@@@@@@@%%@%@@@@@@@@%               |   2. Ver mi album                        |       /  |  / _ \ "
-	Escribir "      @@@@@@@%%#%%+*:.:%%@@@@@@               |   3. Ver album por seleccion             |       `| | | | |"
-	Escribir "      @@@@@%**%##=#++=-:.%%@@@@               |   4. Ver estadisticas de mi coleccion    |        | | | | |"
-	Escribir "      @@@@%*=-.:-..:.....:#%@@@               |   5. Consultar jugador por coordenadas   |        | | | |_| |"
-	Escribir "      @@@@%#%===---::::..-=%@@@               |   6. Salir                               |        |_|  \___/ "
-	Escribir "      @@@==**+%+**----=+=+++@@@               +==========================================+"
-	Escribir "      @@@#-*=***##++==+==+*#@@@"
-	Escribir "      @@@@*=****#*+==---=*=@%%%"
-	Escribir "      @@@%%.-::-+=*====:::-%%%%"
-	Escribir "      @@%%%-++=*:===+----=%%%%%					__  __ _   _ _   _ ____ ___    _    _  " 				
-	Escribir "      %%%%%+=---======-===%%%%%			   	   |  \/  | | | | \ | |  _ \_ _|  / \  | | "
-	Escribir "      %%%%%=++-=+===:=--=*%%%%%				   | |\/| | | | |  \| | | | | |  / _ \ | | "
-	Escribir "      %%%%%%=*+=-=++====+%%%%%%				   | |  | | |_| | |\  | |_| | | / ___ \| |___"
-	Escribir "      %%%%%%=*#==+++==---%%%%%%				   |_|  |_|\___/|_| \_|____/___/_/   \_\_____|"
-	Escribir "      %%%%%%=++==+++---==%%%%%%					   MEXICO-ESTADOS UNIDOS-CANADA 2 0 2 6"
-	Escribir "      %%%%##=+=====+=--=%%%%%%%" 	
-	Escribir "      %%%###*+--==-====.%%%%%%%"
-	Escribir "      %######=+====:::.%%%%%%%%"
-	Escribir "      %#######+=+-:-:.=%%%%%%%%"
-	Escribir "      ########-::::-::*%%%%%%%%"
-	Escribir "      ########*:+=*++*=#%%%%%%%"
-	Escribir "      ######=.=:-++-=+-:#%%%%%%"
-	Escribir "      #######*+****###*+*%%%%%%"
-	Escribir "      ::::::::.:.::............"
-	Escribir "      :::::::::::::::::::::::::"
-	Escribir ""
-	Escribir " >> Selecciona tu opcion:"
-	Leer opcion_de_menu
-	Segun opcion_de_menu Hacer
-		1:
-			Escribir "-----Tipo de sobre------"
-			Escribir "1. Basico"
-			Escribir "2. Epico"
-			Escribir "3. Leyenda"
-			leer tipo_de_sobre
-			primera_opcion(tipo_de_sobre)
-		2:
-			Escribir "Opcion 2 - Ver mi album"
-		3:
-			Escribir "Opcion 3 - Ver album por seleccion"
-		De Otro Modo:
-			Escribir "Opcion no valida"
-	FinSegun
+	Repetir
+		Escribir "      __  __  _____  ____  ____  ____         +==========================================+"
+		Escribir "     (  \/  )(  _  )/ ___)/ ___)(_  _)        |       ALBUM DIGITAL - FIFA 2026          |"
+		Escribir "      )    (  )(_)( \___ \\___ \  )(          |       Jugador activo: " + nombre +"      |"
+		Escribir "     (_/\/\_)(_____)(____/(____/ (__)         +==========================================+"
+		Escribir "                                              |                                          |"
+		Escribir "      L E O      M E S S I                    |   1. Abrir sobre de figuritas            |        __    ___ "
+		Escribir "      @@@@@@@@@@@@%%@%@@@@@@@@%               |   2. Ver mi album                        |       /  |  / _ \ "
+		Escribir "      @@@@@@@%%#%%+*:.:%%@@@@@@               |   3. Ver album por seleccion             |       `| | | | |"
+		Escribir "      @@@@@%**%##=#++=-:.%%@@@@               |   4. Ver estadisticas de mi coleccion    |        | | | | |"
+		Escribir "      @@@@%*=-.:-..:.....:#%@@@               |   5. Consultar jugador por coordenadas   |        | | | |_| |"
+		Escribir "      @@@@%#%===---::::..-=%@@@               |   6. Salir                               |        |_|  \___/ "
+		Escribir "      @@@==**+%+**----=+=+++@@@               +==========================================+"
+		Escribir "      @@@#-*=***##++==+==+*#@@@"
+		Escribir "      @@@@*=****#*+==---=*=@%%%"
+		Escribir "      @@@%%.-::-+=*====:::-%%%%"
+		Escribir "      @@%%%-++=*:===+----=%%%%%					__  __ _   _ _   _ ____ ___    _    _  " 				
+		Escribir "      %%%%%+=---======-===%%%%%			   	   |  \/  | | | | \ | |  _ \_ _|  / \  | | "
+		Escribir "      %%%%%=++-=+===:=--=*%%%%%				   | |\/| | | | |  \| | | | | |  / _ \ | | "
+		Escribir "      %%%%%%=*+=-=++====+%%%%%%				   | |  | | |_| | |\  | |_| | | / ___ \| |___"
+		Escribir "      %%%%%%=*#==+++==---%%%%%%				   |_|  |_|\___/|_| \_|____/___/_/   \_\_____|"
+		Escribir "      %%%%%%=++==+++---==%%%%%%					   MEXICO-ESTADOS UNIDOS-CANADA 2 0 2 6"
+		Escribir "      %%%%##=+=====+=--=%%%%%%%" 	
+		Escribir "      %%%###*+--==-====.%%%%%%%"
+		Escribir "      %######=+====:::.%%%%%%%%"
+		Escribir "      %#######+=+-:-:.=%%%%%%%%"
+		Escribir "      ########-::::-::*%%%%%%%%"
+		Escribir "      ########*:+=*++*=#%%%%%%%"
+		Escribir "      ######=.=:-++-=+-:#%%%%%%"
+		Escribir "      #######*+****###*+*%%%%%%"
+		Escribir "      ::::::::.:.::............"
+		Escribir "      :::::::::::::::::::::::::"
+		Escribir ""
+		Escribir " >> Selecciona tu opcion:"
+		Leer opcion_de_menu
+		Segun opcion_de_menu Hacer
+			1:
+				Repetir
+					Limpiar Pantalla
+					Escribir "-----Tipo de sobre------"
+					Escribir "1. Basico"
+					Escribir "2. Epico"
+					Escribir "3. Leyenda"
+					leer tipo_de_sobre
+					primera_opcion(tipo_de_sobre)
+					Escribir "¿Desea otras cartas? Si o no"
+					leer confirmacion
+					
+				Hasta Que confirmacion <> "si"
+			2:
+				cartas(cantidad_cartas)
+				
+			3:
+				Escribir "Opcion 3 - Ver album por seleccion"
+				Escribir "Opcion no valida"
+			4: 
+				
+			5: 
+				
+			6: 
+				
+		FinSegun
+	Hasta Que opcion_de_menu = 6
 FinAlgoritmo
 
 Funcion listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, indice)
@@ -280,8 +294,15 @@ Funcion listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n
 	nombre_n[indice] = nombreJugador[aleatorio1, aleatorio2]
 	seleccion_n[indice] = seleccion[aleatorio1, aleatorio2]
 	nivel_n[indice] = nivel[aleatorio1, aleatorio2]
+	cantidad_cartas = cantidad_cartas + 1
 	
 FinFuncion
+SubProceso cartas(cantidad_cartas)
+	Limpiar Pantalla
+	Escribir "Album de: " + nombre
+	Escribir "Completado: " + ConvertirATexto(cantidad_cartas)+ " /100 Figuritas (" +  ConvertirATexto(cantidad_cartas)+ "%)";
+FinSubProceso
+
 
 SubProceso resumen_sobres(nombre_n, seleccion_n, nivel_n, contador)
 	Definir i, j Como Entero
