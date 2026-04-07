@@ -1,9 +1,9 @@
 //==========Funcion principal==============
 Algoritmo PROYECTO1
 	Definir tipo_de_sobre Como Entero
-	Definir opcion_de_menu, cantidad_cartas Como Entero
+	Definir opcion_de_menu, contador_cartas Como Entero
+	contador_cartas = 0
 	Definir nombre, confirmacion Como Cadena
-	cantidad_cartas <- 0
 	Escribir "Ingrese su Usuario:"
 	Leer nombre
 	Repetir
@@ -50,17 +50,20 @@ Algoritmo PROYECTO1
 					Escribir "2. Epico"
 					Escribir "3. Leyenda"
 					leer tipo_de_sobre
-					primera_opcion(tipo_de_sobre)
+					primera_opcion(tipo_de_sobre, contador_cartas)
 					Escribir "¿Desea otras cartas? Si o no"
 					leer confirmacion
-					
+					contador_cartas = contador_cartas + 4
 				Hasta Que confirmacion <> "si"
 			2:
-				cartas(cantidad_cartas)
-				
+			
+				cartas(contador_cartas)
+				Escribir "Preciona espacio para regresar al menu"
+				Esperar Tecla
 			3:
 				Escribir "Opcion 3 - Ver album por seleccion"
 				Escribir "Opcion no valida"
+				Esperar Tecla
 			4: 
 				
 			5: 
@@ -68,6 +71,7 @@ Algoritmo PROYECTO1
 			6: 
 				
 		FinSegun
+		Limpiar Pantalla
 	Hasta Que opcion_de_menu = 6
 FinAlgoritmo
 
@@ -290,17 +294,31 @@ Funcion listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n
 	Escribir "| Dorsal: ", dorsal[aleatorio1, aleatorio2]
 	Escribir "====================================="
 	
-	// Almacenar en los arreglos de resumen
 	nombre_n[indice] = nombreJugador[aleatorio1, aleatorio2]
 	seleccion_n[indice] = seleccion[aleatorio1, aleatorio2]
 	nivel_n[indice] = nivel[aleatorio1, aleatorio2]
 	cantidad_cartas = cantidad_cartas + 1
 	
 FinFuncion
-SubProceso cartas(cantidad_cartas)
+
+SubProceso cartas(contador_cartas)
 	Limpiar Pantalla
 	Escribir "Album de: " + nombre
-	Escribir "Completado: " + ConvertirATexto(cantidad_cartas)+ " /100 Figuritas (" +  ConvertirATexto(cantidad_cartas)+ "%)";
+	Escribir "Completado: " + ConvertirATexto(contador_cartas)+ " /100 Figuritas (" +  ConvertirATexto(contador_cartas)+ "%)";
+	
+	Escribir "         J0    J1    J2    J3    J4    J5    J6    J7    J8    J9    J10   J11   J12   J13   J14"
+	Escribir "=================================================================================================="
+	Escribir "ARG 0   [1]    [2]   [0]   [0]   [0]   [1]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
+	Escribir "FRA 1   [0]    [1]   [0]   [1]   [0]   [2]   [0]   [0]   [1]   [0]   [0]   [0]   [0]   [0]    [0]"
+	Escribir "BRA 2   [1]    [0]   [1]   [0]   [0]   [0]   [2]   [0]   [0]   [1]   [0]   [0]   [0]   [0]    [0]"
+	Escribir "ING 3   [0]    [1]   [0]   [0]   [0]   [1]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
+	Escribir "ALE 4   [1]    [0]   [0]   [0]   [2]   [0]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
+	Escribir "ESP 5   [0]    [0]   [2]   [3]   [1]   [0]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
+	Escribir "POR 6   [1]    [0]   [0]   [0]   [0]   [0]   [2]   [0]   [0]   [1]   [0]   [0]   [0]   [0]    [0]"
+	Escribir "HOL 7   [0]    [0]   [1]   [0]   [0]   [0]   [3]   [0]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
+	Escribir "URU 8   [0]    [0]   [0]   [2]   [0]   [4]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
+	Escribir "MEX 9   [3]    [0]   [4]   [1]   [0]   [0]   [0]   [1]   [0]   [2]   [1]   [0]   [0]   [0]    [0]"
+	Escribir "==================================================================================================="
 FinSubProceso
 
 
@@ -362,12 +380,10 @@ SubProceso Pantalla_cargar(nada)
 	
 FinSubProceso
 
-SubProceso primera_opcion(tipo_de_sobre)
-	Definir aleatorio1, aleatorio2, i, contador Como Entero
+Funcion primera_opcion(tipo_de_sobre, contador_cartas)
+	Definir aleatorio1, aleatorio2, i Como Entero
 	Definir nombre_n, seleccion_n, nivel_n Como Cadena
-	
 	Dimensionar nombre_n[4], seleccion_n[4], nivel_n[4]
-	contador <- 0
 	
 	Pantalla_cargar(nada)
 	
@@ -426,8 +442,7 @@ SubProceso primera_opcion(tipo_de_sobre)
 		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 3)
 		contador <- contador + 1
 	FinSi
-	
 	// Mostrar resumen
-	resumen_sobres(nombre_n, seleccion_n, nivel_n, contador)
 	
-FinSubProceso
+	resumen_sobres(nombre_n, seleccion_n, nivel_n, contador)
+FinFuncion
