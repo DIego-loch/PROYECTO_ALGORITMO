@@ -2,6 +2,7 @@
 Algoritmo PROYECTO1
 	Definir tipo_de_sobre Como Entero
 	Definir opcion_de_menu, contador_cartas Como Entero
+	Dimensionar contador_jugador[10, 15]
 	contador_cartas = 0
 	Definir nombre, confirmacion Como Cadena
 	Escribir "Ingrese su Usuario:"
@@ -50,14 +51,14 @@ Algoritmo PROYECTO1
 					Escribir "2. Epico"
 					Escribir "3. Leyenda"
 					leer tipo_de_sobre
-					primera_opcion(tipo_de_sobre, contador_cartas)
+					primera_opcion(tipo_de_sobre, contador_jugador)
 					Escribir "¿Desea otras cartas? Si o no"
 					leer confirmacion
 					contador_cartas = contador_cartas + 4
 				Hasta Que confirmacion <> "si"
 			2:
 			
-				cartas(contador_cartas)
+				cartas(contador_cartas, contador_jugador)
 				Escribir "Preciona espacio para regresar al menu"
 				Esperar Tecla
 			3:
@@ -75,7 +76,7 @@ Algoritmo PROYECTO1
 	Hasta Que opcion_de_menu = 6
 FinAlgoritmo
 
-Funcion listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, indice)
+Funcion listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, indice, contador_jugador)
 	
 	Definir nombreJugador Como Cadena
 	Definir seleccion     Como Cadena
@@ -84,6 +85,7 @@ Funcion listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n
 	Definir altura        Como Real
 	Definir peso          Como Entero
 	Definir dorsal        Como Entero
+	Definir n1, n2 Como Entero
 	
 	Dimensionar nombreJugador[10, 15], seleccion[10, 15], posicion[10, 15], nivel[10, 15]
 	Dimensionar altura[10, 15], peso[10, 15], dorsal[10, 15]
@@ -294,30 +296,33 @@ Funcion listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n
 	Escribir "| Dorsal: ", dorsal[aleatorio1, aleatorio2]
 	Escribir "====================================="
 	
+	n1 = aleatorio1
+	n2 = aleatorio2
 	nombre_n[indice] = nombreJugador[aleatorio1, aleatorio2]
 	seleccion_n[indice] = seleccion[aleatorio1, aleatorio2]
 	nivel_n[indice] = nivel[aleatorio1, aleatorio2]
-	cantidad_cartas = cantidad_cartas + 1
-	
+	contador_jugador[n1, n2] = contador_jugador[n1, n2] + 1
+	 
 FinFuncion
 
-SubProceso cartas(contador_cartas)
+SubProceso cartas(contador_cartas, contador_jugador)
 	Limpiar Pantalla
 	Escribir "Album de: " + nombre
 	Escribir "Completado: " + ConvertirATexto(contador_cartas)+ " /100 Figuritas (" +  ConvertirATexto(contador_cartas)+ "%)";
 	
+	
 	Escribir "         J0    J1    J2    J3    J4    J5    J6    J7    J8    J9    J10   J11   J12   J13   J14"
 	Escribir "=================================================================================================="
-	Escribir "ARG 0   [1]    [2]   [0]   [0]   [0]   [1]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
-	Escribir "FRA 1   [0]    [1]   [0]   [1]   [0]   [2]   [0]   [0]   [1]   [0]   [0]   [0]   [0]   [0]    [0]"
-	Escribir "BRA 2   [1]    [0]   [1]   [0]   [0]   [0]   [2]   [0]   [0]   [1]   [0]   [0]   [0]   [0]    [0]"
-	Escribir "ING 3   [0]    [1]   [0]   [0]   [0]   [1]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
-	Escribir "ALE 4   [1]    [0]   [0]   [0]   [2]   [0]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
-	Escribir "ESP 5   [0]    [0]   [2]   [3]   [1]   [0]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
-	Escribir "POR 6   [1]    [0]   [0]   [0]   [0]   [0]   [2]   [0]   [0]   [1]   [0]   [0]   [0]   [0]    [0]"
-	Escribir "HOL 7   [0]    [0]   [1]   [0]   [0]   [0]   [3]   [0]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
-	Escribir "URU 8   [0]    [0]   [0]   [2]   [0]   [4]   [0]   [1]   [0]   [0]   [0]   [0]   [0]   [0]    [0]"
-	Escribir "MEX 9   [3]    [0]   [4]   [1]   [0]   [0]   [0]   [1]   [0]   [2]   [1]   [0]   [0]   [0]    [0]"
+	Escribir "ARG 0   [" + ConvertirATexto(contador_jugador[0,0]) + "]   [" + ConvertirATexto(contador_jugador[0,1]) + "]   [" + ConvertirATexto(contador_jugador[0,2]) + "]   [" + ConvertirATexto(contador_jugador[0,3]) + "]   [" + ConvertirATexto(contador_jugador[0,4]) + "]   [" + ConvertirATexto(contador_jugador[0,5]) + "]   [" + ConvertirATexto(contador_jugador[0,6]) + "]   [" + ConvertirATexto(contador_jugador[0,7]) + "]   [" + ConvertirATexto(contador_jugador[0,8]) + "]   [" + ConvertirATexto(contador_jugador[0,9]) + "]   [" + ConvertirATexto(contador_jugador[0,10]) + "]   [" + ConvertirATexto(contador_jugador[0,11]) + "]   [" + ConvertirATexto(contador_jugador[0,12]) + "]   [" + ConvertirATexto(contador_jugador[0,13]) + "]   [" + ConvertirATexto(contador_jugador[0,14]) + "]"
+	Escribir "FRA 1   [" + ConvertirATexto(contador_jugador[1,0]) + "]   [" + ConvertirATexto(contador_jugador[1,1]) + "]   [" + ConvertirATexto(contador_jugador[1,2]) + "]   [" + ConvertirATexto(contador_jugador[1,3]) + "]   [" + ConvertirATexto(contador_jugador[1,4]) + "]   [" + ConvertirATexto(contador_jugador[1,5]) + "]   [" + ConvertirATexto(contador_jugador[1,6]) + "]   [" + ConvertirATexto(contador_jugador[1,7]) + "]   [" + ConvertirATexto(contador_jugador[1,8]) + "]   [" + ConvertirATexto(contador_jugador[1,9]) + "]   [" + ConvertirATexto(contador_jugador[1,10]) + "]   [" + ConvertirATexto(contador_jugador[1,11]) + "]   [" + ConvertirATexto(contador_jugador[1,12]) + "]   [" + ConvertirATexto(contador_jugador[1,13]) + "]   [" + ConvertirATexto(contador_jugador[1,14]) + "]"
+	Escribir "BRA 2   [" + ConvertirATexto(contador_jugador[2,0]) + "]   [" + ConvertirATexto(contador_jugador[2,1]) + "]   [" + ConvertirATexto(contador_jugador[2,2]) + "]   [" + ConvertirATexto(contador_jugador[2,3]) + "]   [" + ConvertirATexto(contador_jugador[2,4]) + "]   [" + ConvertirATexto(contador_jugador[2,5]) + "]   [" + ConvertirATexto(contador_jugador[2,6]) + "]   [" + ConvertirATexto(contador_jugador[2,7]) + "]   [" + ConvertirATexto(contador_jugador[2,8]) + "]   [" + ConvertirATexto(contador_jugador[2,9]) + "]   [" + ConvertirATexto(contador_jugador[2,10]) + "]   [" + ConvertirATexto(contador_jugador[2,11]) + "]   [" + ConvertirATexto(contador_jugador[2,12]) + "]   [" + ConvertirATexto(contador_jugador[2,13]) + "]   [" + ConvertirATexto(contador_jugador[2,14]) + "]"
+	Escribir "ING 3   [" + ConvertirATexto(contador_jugador[3,0]) + "]   [" + ConvertirATexto(contador_jugador[3,1]) + "]   [" + ConvertirATexto(contador_jugador[3,2]) + "]   [" + ConvertirATexto(contador_jugador[3,3]) + "]   [" + ConvertirATexto(contador_jugador[3,4]) + "]   [" + ConvertirATexto(contador_jugador[3,5]) + "]   [" + ConvertirATexto(contador_jugador[3,6]) + "]   [" + ConvertirATexto(contador_jugador[3,7]) + "]   [" + ConvertirATexto(contador_jugador[3,8]) + "]   [" + ConvertirATexto(contador_jugador[3,9]) + "]   [" + ConvertirATexto(contador_jugador[3,10]) + "]   [" + ConvertirATexto(contador_jugador[3,11]) + "]   [" + ConvertirATexto(contador_jugador[3,12]) + "]   [" + ConvertirATexto(contador_jugador[3,13]) + "]   [" + ConvertirATexto(contador_jugador[3,14]) + "]"
+	Escribir "ALE 4   [" + ConvertirATexto(contador_jugador[4,0]) + "]   [" + ConvertirATexto(contador_jugador[4,1]) + "]   [" + ConvertirATexto(contador_jugador[4,2]) + "]   [" + ConvertirATexto(contador_jugador[4,3]) + "]   [" + ConvertirATexto(contador_jugador[4,4]) + "]   [" + ConvertirATexto(contador_jugador[4,5]) + "]   [" + ConvertirATexto(contador_jugador[4,6]) + "]   [" + ConvertirATexto(contador_jugador[4,7]) + "]   [" + ConvertirATexto(contador_jugador[4,8]) + "]   [" + ConvertirATexto(contador_jugador[4,9]) + "]   [" + ConvertirATexto(contador_jugador[4,10]) + "]   [" + ConvertirATexto(contador_jugador[4,11]) + "]   [" + ConvertirATexto(contador_jugador[4,12]) + "]   [" + ConvertirATexto(contador_jugador[4,13]) + "]   [" + ConvertirATexto(contador_jugador[4,14]) + "]"
+	Escribir "ESP 5   [" + ConvertirATexto(contador_jugador[5,0]) + "]   [" + ConvertirATexto(contador_jugador[5,1]) + "]   [" + ConvertirATexto(contador_jugador[5,2]) + "]   [" + ConvertirATexto(contador_jugador[5,3]) + "]   [" + ConvertirATexto(contador_jugador[5,4]) + "]   [" + ConvertirATexto(contador_jugador[5,5]) + "]   [" + ConvertirATexto(contador_jugador[5,6]) + "]   [" + ConvertirATexto(contador_jugador[5,7]) + "]   [" + ConvertirATexto(contador_jugador[5,8]) + "]   [" + ConvertirATexto(contador_jugador[5,9]) + "]   [" + ConvertirATexto(contador_jugador[5,10]) + "]   [" + ConvertirATexto(contador_jugador[5,11]) + "]   [" + ConvertirATexto(contador_jugador[5,12]) + "]   [" + ConvertirATexto(contador_jugador[5,13]) + "]   [" + ConvertirATexto(contador_jugador[5,14]) + "]"
+	Escribir "POR 6   [" + ConvertirATexto(contador_jugador[6,0]) + "]   [" + ConvertirATexto(contador_jugador[6,1]) + "]   [" + ConvertirATexto(contador_jugador[6,2]) + "]   [" + ConvertirATexto(contador_jugador[6,3]) + "]   [" + ConvertirATexto(contador_jugador[6,4]) + "]   [" + ConvertirATexto(contador_jugador[6,5]) + "]   [" + ConvertirATexto(contador_jugador[6,6]) + "]   [" + ConvertirATexto(contador_jugador[6,7]) + "]   [" + ConvertirATexto(contador_jugador[6,8]) + "]   [" + ConvertirATexto(contador_jugador[6,9]) + "]   [" + ConvertirATexto(contador_jugador[6,10]) + "]   [" + ConvertirATexto(contador_jugador[6,11]) + "]   [" + ConvertirATexto(contador_jugador[6,12]) + "]   [" + ConvertirATexto(contador_jugador[6,13]) + "]   [" + ConvertirATexto(contador_jugador[6,14]) + "]"
+	Escribir "HOL 7   [" + ConvertirATexto(contador_jugador[7,0]) + "]   [" + ConvertirATexto(contador_jugador[7,1]) + "]   [" + ConvertirATexto(contador_jugador[7,2]) + "]   [" + ConvertirATexto(contador_jugador[7,3]) + "]   [" + ConvertirATexto(contador_jugador[7,4]) + "]   [" + ConvertirATexto(contador_jugador[7,5]) + "]   [" + ConvertirATexto(contador_jugador[7,6]) + "]   [" + ConvertirATexto(contador_jugador[7,7]) + "]   [" + ConvertirATexto(contador_jugador[7,8]) + "]   [" + ConvertirATexto(contador_jugador[7,9]) + "]   [" + ConvertirATexto(contador_jugador[7,10]) + "]   [" + ConvertirATexto(contador_jugador[7,11]) + "]   [" + ConvertirATexto(contador_jugador[7,12]) + "]   [" + ConvertirATexto(contador_jugador[7,13]) + "]   [" + ConvertirATexto(contador_jugador[7,14]) + "]"
+	Escribir "URU 8   [" + ConvertirATexto(contador_jugador[8,0]) + "]   [" + ConvertirATexto(contador_jugador[8,1]) + "]   [" + ConvertirATexto(contador_jugador[8,2]) + "]   [" + ConvertirATexto(contador_jugador[8,3]) + "]   [" + ConvertirATexto(contador_jugador[8,4]) + "]   [" + ConvertirATexto(contador_jugador[8,5]) + "]   [" + ConvertirATexto(contador_jugador[8,6]) + "]   [" + ConvertirATexto(contador_jugador[8,7]) + "]   [" + ConvertirATexto(contador_jugador[8,8]) + "]   [" + ConvertirATexto(contador_jugador[8,9]) + "]   [" + ConvertirATexto(contador_jugador[8,10]) + "]   [" + ConvertirATexto(contador_jugador[8,11]) + "]   [" + ConvertirATexto(contador_jugador[8,12]) + "]   [" + ConvertirATexto(contador_jugador[8,13]) + "]   [" + ConvertirATexto(contador_jugador[8,14]) + "]"
+	Escribir "MEX 9   [" + ConvertirATexto(contador_jugador[9,0]) + "]   [" + ConvertirATexto(contador_jugador[9,1]) + "]   [" + ConvertirATexto(contador_jugador[9,2]) + "]   [" + ConvertirATexto(contador_jugador[9,3]) + "]   [" + ConvertirATexto(contador_jugador[9,4]) + "]   [" + ConvertirATexto(contador_jugador[9,5]) + "]   [" + ConvertirATexto(contador_jugador[9,6]) + "]   [" + ConvertirATexto(contador_jugador[9,7]) + "]   [" + ConvertirATexto(contador_jugador[9,8]) + "]   [" + ConvertirATexto(contador_jugador[9,9]) + "]   [" + ConvertirATexto(contador_jugador[9,10]) + "]   [" + ConvertirATexto(contador_jugador[9,11]) + "]   [" + ConvertirATexto(contador_jugador[9,12]) + "]   [" + ConvertirATexto(contador_jugador[9,13]) + "]   [" + ConvertirATexto(contador_jugador[9,14]) + "]"
 	Escribir "==================================================================================================="
 FinSubProceso
 
@@ -380,7 +385,7 @@ SubProceso Pantalla_cargar(nada)
 	
 FinSubProceso
 
-Funcion primera_opcion(tipo_de_sobre, contador_cartas)
+Funcion primera_opcion(tipo_de_sobre, contador_jugador)
 	Definir aleatorio1, aleatorio2, i Como Entero
 	Definir nombre_n, seleccion_n, nivel_n Como Cadena
 	Dimensionar nombre_n[4], seleccion_n[4], nivel_n[4]
@@ -397,8 +402,9 @@ Funcion primera_opcion(tipo_de_sobre, contador_cartas)
 		Para i <- 0 Hasta 3 Hacer
 			aleatorio1 <- Aleatorio(0,9)
 			aleatorio2 <- Aleatorio(0,9)
-			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i)
+			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i, contador_jugador)
 			contador <- contador + 1
+			
 		FinPara
 	FinSi
 	
@@ -411,13 +417,13 @@ Funcion primera_opcion(tipo_de_sobre, contador_cartas)
 		Para i <- 0 Hasta 2 Hacer
 			aleatorio1 <- Aleatorio(0,9)
 			aleatorio2 <- Aleatorio(0,9)
-			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i)
+			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i, contador_jugador)
 			contador <- contador + 1
 		FinPara
 		
 		aleatorio1 <- Aleatorio(0,9)
 		aleatorio2 <- Aleatorio(10,13)
-		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 3)
+		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 3, contador_jugador)
 		contador <- contador + 1
 	FinSi
 	
@@ -430,16 +436,16 @@ Funcion primera_opcion(tipo_de_sobre, contador_cartas)
 		Para i <- 0 Hasta 1 Hacer
 			aleatorio1 <- Aleatorio(0,9)
 			aleatorio2 <- Aleatorio(0,9)
-			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i)
+			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i, contador_jugador)
 			contador <- contador + 1
 		FinPara
 		aleatorio1 <- Aleatorio(0,9)
 		aleatorio2 <- Aleatorio(10,13)
-		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 2)
+		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 2, contador_jugador)
 		contador <- contador + 1
 		aleatorio1 <- Aleatorio(0,9)
 		aleatorio2 <- 14
-		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 3)
+		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 3, contador_jugador)
 		contador <- contador + 1
 	FinSi
 	// Mostrar resumen
