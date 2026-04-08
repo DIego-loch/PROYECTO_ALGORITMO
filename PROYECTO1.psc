@@ -1,10 +1,23 @@
-//==========Funcion principal==============
 Algoritmo PROYECTO1
 	Definir tipo_de_sobre Como Entero
-	Definir opcion_de_menu, contador_cartas Como Entero
-	Dimensionar contador_jugador[10, 15]
+	Definir opcion_de_menu, contador_cartas, opcion_seleccion Como Entero
+	Definir fila, columna Como Entero
+	Definir total_figuritas, figuritas_faltantes, total_repetidas, total_copias_extra Como Entero
+	Definir comunes_total, comunes_obtenidas, epicas_total, epicas_obtenidas Como Entero
+	Definir leyendas_total, leyendas_obtenidas Como Entero
+	Definir porcentaje_comunes, porcentaje_epicas, porcentaje_leyendas Como Real
+	Definir max_porcentaje, min_porcentaje Como Real
+	Definir seleccion_max, seleccion_min Como Entero
+	Dimensionar contador_jugador[10, 15], tipo_seleccion1[10,3]
+
+	Definir nombreJugador, posicionJugador, nivelJugador, seleccionJugador Como Cadena
+	Dimensionar nombreJugador[10,15], posicionJugador[10,15], nivelJugador[10,15], seleccionJugador[10,15]
+	
 	contador_cartas = 0
 	Definir nombre, confirmacion Como Cadena
+
+	cargarDatosJugadores(nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
+	
 	Escribir "Ingrese su Usuario:"
 	Leer nombre
 	Repetir
@@ -51,261 +64,454 @@ Algoritmo PROYECTO1
 					Escribir "2. Epico"
 					Escribir "3. Leyenda"
 					leer tipo_de_sobre
-					primera_opcion(tipo_de_sobre, contador_jugador)
+					primera_opcion(tipo_de_sobre, contador_jugador, nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
 					Escribir "¿Desea otras cartas? Si o no"
 					leer confirmacion
 					contador_cartas = contador_cartas + 4
 				Hasta Que confirmacion <> "si"
 			2:
-			
-				cartas(contador_cartas, contador_jugador)
-				Escribir "Preciona espacio para regresar al menu"
+				cartas(contador_cartas, contador_jugador, nombre)
+				Escribir "Presiona espacio para regresar al menu"
 				Esperar Tecla
 			3:
-				Escribir "Opcion 3 - Ver album por seleccion"
-				Escribir "Opcion no valida"
+				Limpiar Pantalla
+				Escribir "====================================="
+				Escribir "       VER ALBUM POR SELECCION"
+				Escribir "====================================="
+				Escribir "0 - Argentina"
+				Escribir "1 - Francia"
+				Escribir "2 - Brasil"
+				Escribir "3 - Inglaterra"
+				Escribir "4 - Alemania"
+				Escribir "5 - Espana"
+				Escribir "6 - Portugal"
+				Escribir "7 - Holanda"
+				Escribir "8 - Uruguay"
+				Escribir "9 - Mexico"
+				Escribir ""
+				Escribir "Ingrese numero (0-9):"
+				Leer opcion_seleccion
+				
+				Si opcion_seleccion >= 0 Y opcion_seleccion <= 9 Entonces
+					Limpiar Pantalla
+					Escribir "================================================="
+					Segun opcion_seleccion Hacer
+						0: Escribir "       SELECCION: ARGENTINA"
+						1: Escribir "       SELECCION: FRANCIA"
+						2: Escribir "       SELECCION: BRASIL"
+						3: Escribir "       SELECCION: INGLATERRA"
+						4: Escribir "       SELECCION: ALEMANIA"
+						5: Escribir "       SELECCION: ESPANA"
+						6: Escribir "       SELECCION: PORTUGAL"
+						7: Escribir "       SELECCION: HOLANDA"
+						8: Escribir "       SELECCION: URUGUAY"
+						9: Escribir "       SELECCION: MEXICO"
+					FinSegun
+					Escribir "================================================="
+					Escribir ""
+					Escribir "# | Jugador              | Posicion      | Nivel    | Estado"
+					Escribir "--+----------------------+---------------+----------+-------"
+					
+					Para i <- 0 Hasta 14 Hacer
+						Escribir Sin Saltar i+1, " | "
+						Escribir Sin Saltar nombreJugador[opcion_seleccion, i],  "  "
+						Escribir Sin Saltar posicionJugador[opcion_seleccion, i],  "  "
+						Escribir Sin Saltar nivelJugador[opcion_seleccion, i],  "  "
+						Escribir "[ ", contador_jugador[opcion_seleccion, i],  "  ]"
+					FinPara
+					
+					Escribir "================================================="
+				Sino
+					Escribir "Opcion invalida"
+				FinSi
+				
+				Escribir ""
+				Escribir "Presione una tecla para continuar..."
 				Esperar Tecla
-			4: 
+			4:
+					Limpiar Pantalla
+					Escribir "============================================="
+					Escribir "ESTADISTICAS DE COLECCION - ", nombre
+					Escribir "============================================="
+					
+					total_unicas <- 0
+					total_cartas_conteo <- 0
+					total_repetidas <- 0
+					total_copias_extra <- 0
+					
+					Para i <- 0 Hasta 9 Hacer
+						Para j <- 0 Hasta 14 Hacer
+							Si contador_jugador[i,j] > 0 Entonces
+								total_unicas <- total_unicas + 1
+								total_cartas_conteo <- total_cartas_conteo + contador_jugador[i,j]
+								Si contador_jugador[i,j] > 1 Entonces
+									total_repetidas <- total_repetidas + 1
+									total_copias_extra <- total_copias_extra + (contador_jugador[i,j] - 1)
+								FinSi
+							FinSi
+						FinPara
+					FinPara
+					
+					figuritas_faltantes <- 100 - total_unicas
+					
+					Escribir "Figuritas en album:"
+					Escribir total_unicas, " / 100"
+					Escribir "(", total_unicas, "%)"
+					Escribir ""
+					Escribir "Figuritas faltantes: ", figuritas_faltantes
+					Escribir "Total de cartas fisicas: ", total_cartas_conteo
+					Escribir "Figuritas repetidas: ", total_repetidas, " (", total_copias_extra, " copias extra)"
+					Escribir "============================================="
+					
+					
+					comunes_total <- 0
+					comunes_obtenidas <- 0
+					epicas_total <- 0
+					epicas_obtenidas <- 0
+					leyendas_total <- 0
+					leyendas_obtenidas <- 0
+					
+					Para i <- 0 Hasta 9 Hacer
+						Para j <- 0 Hasta 14 Hacer
+							Si j <= 9 Entonces
+								comunes_total <- comunes_total + 1
+								Si contador_jugador[i,j] > 0 Entonces
+									comunes_obtenidas <- comunes_obtenidas + 1
+								FinSi
+							FinSi
+							Si j >= 10 Y j <= 13 Entonces
+								epicas_total <- epicas_total + 1
+								Si contador_jugador[i,j] > 0 Entonces
+									epicas_obtenidas <- epicas_obtenidas + 1
+								FinSi
+							FinSi
+							Si j = 14 Entonces
+								leyendas_total <- leyendas_total + 1
+								Si contador_jugador[i,j] > 0 Entonces
+									leyendas_obtenidas <- leyendas_obtenidas + 1
+								FinSi
+							FinSi
+						FinPara
+					FinPara
+					
+					porcentaje_comunes <- Redon((comunes_obtenidas * 100) / comunes_total)
+					porcentaje_epicas <- Redon((epicas_obtenidas * 100) / epicas_total)
+					porcentaje_leyendas <- Redon((leyendas_obtenidas * 100) / leyendas_total)
+					
+					Escribir "Por nivel:"
+					Escribir "Comunes (", comunes_total, " total): ", comunes_obtenidas, " obtenidas (", porcentaje_comunes, "%)"
+					Escribir "Epicas (", epicas_total, " total): ", epicas_obtenidas, " obtenidas (", porcentaje_epicas, "%)"
+					Escribir "Leyendas (", leyendas_total, " total): ", leyendas_obtenidas, " obtenida (", porcentaje_leyendas, "%)"
+					Escribir "============================================="
+					
+					
+					Dimensionar selecciones_nombres[10]
+					selecciones_nombres[0] = "Argentina"
+					selecciones_nombres[1] = "Francia"
+					selecciones_nombres[2] = "Brasil"
+					selecciones_nombres[3] = "Inglaterra"
+					selecciones_nombres[4] = "Alemania"
+					selecciones_nombres[5] = "Espana"
+					selecciones_nombres[6] = "Portugal"
+					selecciones_nombres[7] = "Holanda"
+					selecciones_nombres[8] = "Uruguay"
+					selecciones_nombres[9] = "Mexico"
+					
+					Definir seleccion_obtenidas Como Entero
+					Definir seleccion_porcentaje Como Real
+					Dimensionar seleccion_obtenidas[10], seleccion_porcentaje[10]
+					
+					max_porcentaje <- 0
+					min_porcentaje <- 100
+					seleccion_max <- 0
+					seleccion_min <- 0
+					
+					Para i <- 0 Hasta 9 Hacer
+						seleccion_obtenidas[i] <- 0
+						Para j <- 0 Hasta 14 Hacer
+							Si contador_jugador[i,j] > 0 Entonces
+								seleccion_obtenidas[i] <- seleccion_obtenidas[i] + 1
+							FinSi
+						FinPara
+						seleccion_porcentaje[i] <- Redon((seleccion_obtenidas[i] * 100) / 15)
+						
+						Escribir selecciones_nombres[i], ": ", seleccion_obtenidas[i], " / 15 (", seleccion_porcentaje[i], "%)"
+						
+						Si seleccion_porcentaje[i] > max_porcentaje Entonces
+							max_porcentaje <- seleccion_porcentaje[i]
+							seleccion_max <- i
+						FinSi
+						Si seleccion_porcentaje[i] < min_porcentaje Entonces
+							min_porcentaje <- seleccion_porcentaje[i]
+							seleccion_min <- i
+						FinSi
+					FinPara
+					
+					Escribir "============================================="
+					Escribir "Seleccion mas completa: ", selecciones_nombres[seleccion_max], " (", max_porcentaje, "%)"
+					Escribir "Seleccion menos completa: ", selecciones_nombres[seleccion_min], " (", min_porcentaje, "%)"
+					Escribir "============================================="
+					
+					Escribir "Presione una tecla para continuar..."
+					Esperar Tecla
 				
-			5: 
+			5:
+				Limpiar Pantalla
+				Escribir "============================================="
+				Escribir "CONSULTA DE JUGADOR POR COORDENADA"
+				Escribir "============================================="
+				Escribir "Ingrese fila (0-9):"
+				Leer fila
+				Escribir "Ingrese columna (0-14):"
+				Leer columna
 				
-			6: 
+				Si fila >= 0 Y fila <= 9 Y columna >= 0 Y columna <= 14 Entonces
+					Limpiar Pantalla
+					Escribir "============================================="
+					Escribir "FICHA DE JUGADOR"
+					Escribir "============================================="
+					Escribir "Nombre: ", nombreJugador[fila, columna]
+					Escribir "Seleccion: ", seleccionJugador[fila, columna]
+					Escribir "Posicion: ", posicionJugador[fila, columna]
+					Escribir "Nivel: ", nivelJugador[fila, columna]
+					Escribir "============================================="
+					
+					Si contador_jugador[fila, columna] > 0 Entonces
+						Escribir "Estado en tu album: La tienes [", contador_jugador[fila, columna], "]"
+					Sino
+						Escribir "Estado en tu album: No la tienes [ ]"
+					FinSi
+					Escribir "============================================="
+				Sino
+					Escribir "ERROR: Coordenadas invalidas"
+					Escribir "Fila debe ser 0-9, Columna debe ser 0-14"
+				FinSi
 				
+				Escribir ""
+				Escribir "Presione una tecla para continuar..."
+				Esperar Tecla
+				
+			6:
+				Escribir "Gracias por usar el album digital"
+				Esperar 3 segundos
 		FinSegun
 		Limpiar Pantalla
 	Hasta Que opcion_de_menu = 6
 FinAlgoritmo
 
-Funcion listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, indice, contador_jugador)
-	
-	Definir nombreJugador Como Cadena
-	Definir seleccion     Como Cadena
-	Definir posicion      Como Cadena
-	Definir nivel         Como Cadena
-	Definir altura        Como Real
-	Definir peso          Como Entero
-	Definir dorsal        Como Entero
-	Definir n1, n2 Como Entero
-	
-	Dimensionar nombreJugador[10, 15], seleccion[10, 15], posicion[10, 15], nivel[10, 15]
-	Dimensionar altura[10, 15], peso[10, 15], dorsal[10, 15]
-	
+SubProceso cargarDatosJugadores(nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
 	// ==========================================================
 	// SEL = 0 : ARGENTINA
 	// ==========================================================
 	// --- Comunes (pos 0-9) ---
-	nombreJugador[0,0]="Emi Martinez";        seleccion[0,0]="Argentina"; posicion[0,0]="Portero";        nivel[0,0]="Comun";   altura[0,0]=1.95; peso[0,0]=88;  dorsal[0,0]=23
-	nombreJugador[0,1]="Nahuel Molina";        seleccion[0,1]="Argentina"; posicion[0,1]="Defensa";        nivel[0,1]="Comun";   altura[0,1]=1.80; peso[0,1]=75;  dorsal[0,1]=26
-	nombreJugador[0,2]="Lisandro Martinez";    seleccion[0,2]="Argentina"; posicion[0,2]="Defensa";        nivel[0,2]="Comun";   altura[0,2]=1.75; peso[0,2]=77;  dorsal[0,2]=5
-	nombreJugador[0,3]="Nicolas Otamendi";     seleccion[0,3]="Argentina"; posicion[0,3]="Defensa";        nivel[0,3]="Comun";   altura[0,3]=1.83; peso[0,3]=81;  dorsal[0,3]=19
-	nombreJugador[0,4]="Marcos Acuna";         seleccion[0,4]="Argentina"; posicion[0,4]="Defensa";        nivel[0,4]="Comun";   altura[0,4]=1.72; peso[0,4]=72;  dorsal[0,4]=8
-	nombreJugador[0,5]="Rodrigo De Paul";      seleccion[0,5]="Argentina"; posicion[0,5]="Mediocampista";  nivel[0,5]="Comun";   altura[0,5]=1.80; peso[0,5]=79;  dorsal[0,5]=7
-	nombreJugador[0,6]="Leandro Paredes";      seleccion[0,6]="Argentina"; posicion[0,6]="Mediocampista";  nivel[0,6]="Comun";   altura[0,6]=1.80; peso[0,6]=77;  dorsal[0,6]=5
-	nombreJugador[0,7]="Alexis Mac Allister";  seleccion[0,7]="Argentina"; posicion[0,7]="Mediocampista";  nivel[0,7]="Comun";   altura[0,7]=1.77; peso[0,7]=75;  dorsal[0,7]=20
-	nombreJugador[0,8]="Thiago Almada";        seleccion[0,8]="Argentina"; posicion[0,8]="Mediocampista";  nivel[0,8]="Comun";   altura[0,8]=1.73; peso[0,8]=68;  dorsal[0,8]=18
-	nombreJugador[0,9]="Lautaro Martinez";     seleccion[0,9]="Argentina"; posicion[0,9]="Delantero";      nivel[0,9]="Comun";   altura[0,9]=1.74; peso[0,9]=72;  dorsal[0,9]=22
+	nombreJugador[0,0]="Emi Martinez";        seleccionJugador[0,0]="Argentina"; posicionJugador[0,0]="Portero";        nivelJugador[0,0]="Comun"
+	nombreJugador[0,1]="Nahuel Molina";        seleccionJugador[0,1]="Argentina"; posicionJugador[0,1]="Defensa";        nivelJugador[0,1]="Comun"
+	nombreJugador[0,2]="Lisandro Martinez";    seleccionJugador[0,2]="Argentina"; posicionJugador[0,2]="Defensa";        nivelJugador[0,2]="Comun"
+	nombreJugador[0,3]="Nicolas Otamendi";     seleccionJugador[0,3]="Argentina"; posicionJugador[0,3]="Defensa";        nivelJugador[0,3]="Comun"
+	nombreJugador[0,4]="Marcos Acuna";         seleccionJugador[0,4]="Argentina"; posicionJugador[0,4]="Defensa";        nivelJugador[0,4]="Comun"
+	nombreJugador[0,5]="Rodrigo De Paul";      seleccionJugador[0,5]="Argentina"; posicionJugador[0,5]="Mediocampista";  nivelJugador[0,5]="Comun"
+	nombreJugador[0,6]="Leandro Paredes";      seleccionJugador[0,6]="Argentina"; posicionJugador[0,6]="Mediocampista";  nivelJugador[0,6]="Comun"
+	nombreJugador[0,7]="Alexis Mac Allister";  seleccionJugador[0,7]="Argentina"; posicionJugador[0,7]="Mediocampista";  nivelJugador[0,7]="Comun"
+	nombreJugador[0,8]="Thiago Almada";        seleccionJugador[0,8]="Argentina"; posicionJugador[0,8]="Mediocampista";  nivelJugador[0,8]="Comun"
+	nombreJugador[0,9]="Lautaro Martinez";     seleccionJugador[0,9]="Argentina"; posicionJugador[0,9]="Delantero";      nivelJugador[0,9]="Comun"
 	// --- Epicos (pos 10-13) ---
-	nombreJugador[0,10]="Angel Di Maria";      seleccion[0,10]="Argentina"; posicion[0,10]="Mediocampista"; nivel[0,10]="Epico";  altura[0,10]=1.78; peso[0,10]=75; dorsal[0,10]=11
-	nombreJugador[0,11]="Julian Alvarez";      seleccion[0,11]="Argentina"; posicion[0,11]="Delantero";     nivel[0,11]="Epico";  altura[0,11]=1.70; peso[0,11]=70; dorsal[0,11]=9
-	nombreJugador[0,12]="Paulo Dybala";        seleccion[0,12]="Argentina"; posicion[0,12]="Delantero";     nivel[0,12]="Epico";  altura[0,12]=1.77; peso[0,12]=75; dorsal[0,12]=21
-	nombreJugador[0,13]="Giovani Lo Celso";    seleccion[0,13]="Argentina"; posicion[0,13]="Mediocampista"; nivel[0,13]="Epico";  altura[0,13]=1.77; peso[0,13]=72; dorsal[0,13]=14
+	nombreJugador[0,10]="Angel Di Maria";      seleccionJugador[0,10]="Argentina"; posicionJugador[0,10]="Mediocampista"; nivelJugador[0,10]="Epico"
+	nombreJugador[0,11]="Julian Alvarez";      seleccionJugador[0,11]="Argentina"; posicionJugador[0,11]="Delantero";     nivelJugador[0,11]="Epico"
+	nombreJugador[0,12]="Paulo Dybala";        seleccionJugador[0,12]="Argentina"; posicionJugador[0,12]="Delantero";     nivelJugador[0,12]="Epico"
+	nombreJugador[0,13]="Giovani Lo Celso";    seleccionJugador[0,13]="Argentina"; posicionJugador[0,13]="Mediocampista"; nivelJugador[0,13]="Epico"
 	// --- Leyenda (pos 14) ---
-	nombreJugador[0,14]="Lionel Messi";        seleccion[0,14]="Argentina"; posicion[0,14]="Delantero";     nivel[0,14]="Leyenda"; altura[0,14]=1.70; peso[0,14]=72; dorsal[0,14]=10
+	nombreJugador[0,14]="Lionel Messi";        seleccionJugador[0,14]="Argentina"; posicionJugador[0,14]="Delantero";     nivelJugador[0,14]="Leyenda"
 	
 	// ==========================================================
 	// SEL = 1 : FRANCIA
 	// ==========================================================
-	nombreJugador[1,0]="Mike Maignan";         seleccion[1,0]="Francia"; posicion[1,0]="Portero";         nivel[1,0]="Comun";   altura[1,0]=1.91; peso[1,0]=88;  dorsal[1,0]=16
-	nombreJugador[1,1]="Jules Kounde";          seleccion[1,1]="Francia"; posicion[1,1]="Defensa";         nivel[1,1]="Comun";   altura[1,1]=1.78; peso[1,1]=73;  dorsal[1,1]=5
-	nombreJugador[1,2]="Dayot Upamecano";       seleccion[1,2]="Francia"; posicion[1,2]="Defensa";         nivel[1,2]="Comun";   altura[1,2]=1.86; peso[1,2]=83;  dorsal[1,2]=4
-	nombreJugador[1,3]="Theo Hernandez";        seleccion[1,3]="Francia"; posicion[1,3]="Defensa";         nivel[1,3]="Comun";   altura[1,3]=1.84; peso[1,3]=84;  dorsal[1,3]=22
-	nombreJugador[1,4]="William Saliba";        seleccion[1,4]="Francia"; posicion[1,4]="Defensa";         nivel[1,4]="Comun";   altura[1,4]=1.92; peso[1,4]=92;  dorsal[1,4]=17
-	nombreJugador[1,5]="Adrien Rabiot";         seleccion[1,5]="Francia"; posicion[1,5]="Mediocampista";   nivel[1,5]="Comun";   altura[1,5]=1.88; peso[1,5]=83;  dorsal[1,5]=14
-	nombreJugador[1,6]="Eduardo Camavinga";     seleccion[1,6]="Francia"; posicion[1,6]="Mediocampista";   nivel[1,6]="Comun";   altura[1,6]=1.82; peso[1,6]=75;  dorsal[1,6]=8
-	nombreJugador[1,7]="Youssouf Fofana";       seleccion[1,7]="Francia"; posicion[1,7]="Mediocampista";   nivel[1,7]="Comun";   altura[1,7]=1.86; peso[1,7]=80;  dorsal[1,7]=15
-	nombreJugador[1,8]="Kingsley Coman";        seleccion[1,8]="Francia"; posicion[1,8]="Delantero";       nivel[1,8]="Comun";   altura[1,8]=1.80; peso[1,8]=76;  dorsal[1,8]=11
-	nombreJugador[1,9]="Kolo Muani";            seleccion[1,9]="Francia"; posicion[1,9]="Delantero";       nivel[1,9]="Comun";   altura[1,9]=1.87; peso[1,9]=80;  dorsal[1,9]=23
-	nombreJugador[1,10]="Antoine Griezmann";    seleccion[1,10]="Francia"; posicion[1,10]="Mediocampista";  nivel[1,10]="Epico";  altura[1,10]=1.76; peso[1,10]=73; dorsal[1,10]=7
-	nombreJugador[1,11]="Ousmane Dembele";      seleccion[1,11]="Francia"; posicion[1,11]="Delantero";      nivel[1,11]="Epico";  altura[1,11]=1.78; peso[1,11]=68; dorsal[1,11]=10
-	nombreJugador[1,12]="Marcus Thuram";        seleccion[1,12]="Francia"; posicion[1,12]="Delantero";      nivel[1,12]="Epico";  altura[1,12]=1.94; peso[1,12]=90; dorsal[1,12]=9
-	nombreJugador[1,13]="Aurelien Tchouameni"; seleccion[1,13]="Francia"; posicion[1,13]="Mediocampista";  nivel[1,13]="Epico";  altura[1,13]=1.88; peso[1,13]=85; dorsal[1,13]=8
-	nombreJugador[1,14]="Kylian Mbappe";        seleccion[1,14]="Francia"; posicion[1,14]="Delantero";      nivel[1,14]="Leyenda"; altura[1,14]=1.78; peso[1,14]=75; dorsal[1,14]=10
+	nombreJugador[1,0]="Mike Maignan";         seleccionJugador[1,0]="Francia"; posicionJugador[1,0]="Portero";         nivelJugador[1,0]="Comun"
+	nombreJugador[1,1]="Jules Kounde";          seleccionJugador[1,1]="Francia"; posicionJugador[1,1]="Defensa";         nivelJugador[1,1]="Comun"
+	nombreJugador[1,2]="Dayot Upamecano";       seleccionJugador[1,2]="Francia"; posicionJugador[1,2]="Defensa";         nivelJugador[1,2]="Comun"
+	nombreJugador[1,3]="Theo Hernandez";        seleccionJugador[1,3]="Francia"; posicionJugador[1,3]="Defensa";         nivelJugador[1,3]="Comun"
+	nombreJugador[1,4]="William Saliba";        seleccionJugador[1,4]="Francia"; posicionJugador[1,4]="Defensa";         nivelJugador[1,4]="Comun"
+	nombreJugador[1,5]="Adrien Rabiot";         seleccionJugador[1,5]="Francia"; posicionJugador[1,5]="Mediocampista";   nivelJugador[1,5]="Comun"
+	nombreJugador[1,6]="Eduardo Camavinga";     seleccionJugador[1,6]="Francia"; posicionJugador[1,6]="Mediocampista";   nivelJugador[1,6]="Comun"
+	nombreJugador[1,7]="Youssouf Fofana";       seleccionJugador[1,7]="Francia"; posicionJugador[1,7]="Mediocampista";   nivelJugador[1,7]="Comun"
+	nombreJugador[1,8]="Kingsley Coman";        seleccionJugador[1,8]="Francia"; posicionJugador[1,8]="Delantero";       nivelJugador[1,8]="Comun"
+	nombreJugador[1,9]="Kolo Muani";            seleccionJugador[1,9]="Francia"; posicionJugador[1,9]="Delantero";       nivelJugador[1,9]="Comun"
+	nombreJugador[1,10]="Antoine Griezmann";    seleccionJugador[1,10]="Francia"; posicionJugador[1,10]="Mediocampista";  nivelJugador[1,10]="Epico"
+	nombreJugador[1,11]="Ousmane Dembele";      seleccionJugador[1,11]="Francia"; posicionJugador[1,11]="Delantero";      nivelJugador[1,11]="Epico"
+	nombreJugador[1,12]="Marcus Thuram";        seleccionJugador[1,12]="Francia"; posicionJugador[1,12]="Delantero";      nivelJugador[1,12]="Epico"
+	nombreJugador[1,13]="Aurelien Tchouameni"; seleccionJugador[1,13]="Francia"; posicionJugador[1,13]="Mediocampista";  nivelJugador[1,13]="Epico"
+	nombreJugador[1,14]="Kylian Mbappe";        seleccionJugador[1,14]="Francia"; posicionJugador[1,14]="Delantero";      nivelJugador[1,14]="Leyenda"
 	
 	// ==========================================================
 	// SEL = 2 : BRASIL
 	// ==========================================================
-	nombreJugador[2,0]="Alisson Becker";        seleccion[2,0]="Brasil"; posicion[2,0]="Portero";         nivel[2,0]="Comun";   altura[2,0]=1.91; peso[2,0]=91;  dorsal[2,0]=1
-	nombreJugador[2,1]="Danilo";                 seleccion[2,1]="Brasil"; posicion[2,1]="Defensa";         nivel[2,1]="Comun";   altura[2,1]=1.84; peso[2,1]=80;  dorsal[2,1]=2
-	nombreJugador[2,2]="Marquinhos";             seleccion[2,2]="Brasil"; posicion[2,2]="Defensa";         nivel[2,2]="Comun";   altura[2,2]=1.83; peso[2,2]=75;  dorsal[2,2]=4
-	nombreJugador[2,3]="Gabriel Magalhaes";      seleccion[2,3]="Brasil"; posicion[2,3]="Defensa";         nivel[2,3]="Comun";   altura[2,3]=1.91; peso[2,3]=87;  dorsal[2,3]=3
-	nombreJugador[2,4]="Alex Telles";            seleccion[2,4]="Brasil"; posicion[2,4]="Defensa";         nivel[2,4]="Comun";   altura[2,4]=1.81; peso[2,4]=77;  dorsal[2,4]=6
-	nombreJugador[2,5]="Casemiro";               seleccion[2,5]="Brasil"; posicion[2,5]="Mediocampista";   nivel[2,5]="Comun";   altura[2,5]=1.85; peso[2,5]=84;  dorsal[2,5]=5
-	nombreJugador[2,6]="Bruno Guimaraes";        seleccion[2,6]="Brasil"; posicion[2,6]="Mediocampista";   nivel[2,6]="Comun";   altura[2,6]=1.83; peso[2,6]=77;  dorsal[2,6]=15
-	nombreJugador[2,7]="Lucas Paqueta";          seleccion[2,7]="Brasil"; posicion[2,7]="Mediocampista";   nivel[2,7]="Comun";   altura[2,7]=1.80; peso[2,7]=75;  dorsal[2,7]=10
-	nombreJugador[2,8]="Gabriel Martinelli";     seleccion[2,8]="Brasil"; posicion[2,8]="Delantero";       nivel[2,8]="Comun";   altura[2,8]=1.75; peso[2,8]=75;  dorsal[2,8]=11
-	nombreJugador[2,9]="Richarlison";            seleccion[2,9]="Brasil"; posicion[2,9]="Delantero";       nivel[2,9]="Comun";   altura[2,9]=1.84; peso[2,9]=80;  dorsal[2,9]=9
-	nombreJugador[2,10]="Rodrygo";               seleccion[2,10]="Brasil"; posicion[2,10]="Delantero";      nivel[2,10]="Epico";  altura[2,10]=1.74; peso[2,10]=64; dorsal[2,10]=11
-	nombreJugador[2,11]="Raphinha";              seleccion[2,11]="Brasil"; posicion[2,11]="Delantero";      nivel[2,11]="Epico";  altura[2,11]=1.76; peso[2,11]=73; dorsal[2,11]=19
-	nombreJugador[2,12]="Endrick";               seleccion[2,12]="Brasil"; posicion[2,12]="Delantero";      nivel[2,12]="Epico";  altura[2,12]=1.73; peso[2,12]=76; dorsal[2,12]=9
-	nombreJugador[2,13]="Militao";               seleccion[2,13]="Brasil"; posicion[2,13]="Defensa";        nivel[2,13]="Epico";  altura[2,13]=1.86; peso[2,13]=78; dorsal[2,13]=3
-	nombreJugador[2,14]="Vinicius Jr";           seleccion[2,14]="Brasil"; posicion[2,14]="Delantero";      nivel[2,14]="Leyenda"; altura[2,14]=1.76; peso[2,14]=73; dorsal[2,14]=7
+	nombreJugador[2,0]="Alisson Becker";        seleccionJugador[2,0]="Brasil"; posicionJugador[2,0]="Portero";         nivelJugador[2,0]="Comun"
+	nombreJugador[2,1]="Danilo";                 seleccionJugador[2,1]="Brasil"; posicionJugador[2,1]="Defensa";         nivelJugador[2,1]="Comun"
+	nombreJugador[2,2]="Marquinhos";             seleccionJugador[2,2]="Brasil"; posicionJugador[2,2]="Defensa";         nivelJugador[2,2]="Comun"
+	nombreJugador[2,3]="Gabriel Magalhaes";      seleccionJugador[2,3]="Brasil"; posicionJugador[2,3]="Defensa";         nivelJugador[2,3]="Comun"
+	nombreJugador[2,4]="Alex Telles";            seleccionJugador[2,4]="Brasil"; posicionJugador[2,4]="Defensa";         nivelJugador[2,4]="Comun"
+	nombreJugador[2,5]="Casemiro";               seleccionJugador[2,5]="Brasil"; posicionJugador[2,5]="Mediocampista";   nivelJugador[2,5]="Comun"
+	nombreJugador[2,6]="Bruno Guimaraes";        seleccionJugador[2,6]="Brasil"; posicionJugador[2,6]="Mediocampista";   nivelJugador[2,6]="Comun"
+	nombreJugador[2,7]="Lucas Paqueta";          seleccionJugador[2,7]="Brasil"; posicionJugador[2,7]="Mediocampista";   nivelJugador[2,7]="Comun"
+	nombreJugador[2,8]="Gabriel Martinelli";     seleccionJugador[2,8]="Brasil"; posicionJugador[2,8]="Delantero";       nivelJugador[2,8]="Comun"
+	nombreJugador[2,9]="Richarlison";            seleccionJugador[2,9]="Brasil"; posicionJugador[2,9]="Delantero";       nivelJugador[2,9]="Comun"
+	nombreJugador[2,10]="Rodrygo";               seleccionJugador[2,10]="Brasil"; posicionJugador[2,10]="Delantero";      nivelJugador[2,10]="Epico"
+	nombreJugador[2,11]="Raphinha";              seleccionJugador[2,11]="Brasil"; posicionJugador[2,11]="Delantero";      nivelJugador[2,11]="Epico"
+	nombreJugador[2,12]="Endrick";               seleccionJugador[2,12]="Brasil"; posicionJugador[2,12]="Delantero";      nivelJugador[2,12]="Epico"
+	nombreJugador[2,13]="Militao";               seleccionJugador[2,13]="Brasil"; posicionJugador[2,13]="Defensa";        nivelJugador[2,13]="Epico"
+	nombreJugador[2,14]="Vinicius Jr";           seleccionJugador[2,14]="Brasil"; posicionJugador[2,14]="Delantero";      nivelJugador[2,14]="Leyenda"
 	
 	// ==========================================================
 	// SEL = 3 : INGLATERRA
 	// ==========================================================
-	nombreJugador[3,0]="Jordan Pickford";        seleccion[3,0]="Inglaterra"; posicion[3,0]="Portero";        nivel[3,0]="Comun";   altura[3,0]=1.85; peso[3,0]=80;  dorsal[3,0]=1
-	nombreJugador[3,1]="Reece James";            seleccion[3,1]="Inglaterra"; posicion[3,1]="Defensa";        nivel[3,1]="Comun";   altura[3,1]=1.80; peso[3,1]=80;  dorsal[3,1]=2
-	nombreJugador[3,2]="John Stones";            seleccion[3,2]="Inglaterra"; posicion[3,2]="Defensa";        nivel[3,2]="Comun";   altura[3,2]=1.88; peso[3,2]=70;  dorsal[3,2]=5
-	nombreJugador[3,3]="Marc Guehi";             seleccion[3,3]="Inglaterra"; posicion[3,3]="Defensa";        nivel[3,3]="Comun";   altura[3,3]=1.82; peso[3,3]=76;  dorsal[3,3]=6
-	nombreJugador[3,4]="Luke Shaw";              seleccion[3,4]="Inglaterra"; posicion[3,4]="Defensa";        nivel[3,4]="Comun";   altura[3,4]=1.85; peso[3,4]=76;  dorsal[3,4]=3
-	nombreJugador[3,5]="Declan Rice";            seleccion[3,5]="Inglaterra"; posicion[3,5]="Mediocampista";  nivel[3,5]="Comun";   altura[3,5]=1.85; peso[3,5]=82;  dorsal[3,5]=4
-	nombreJugador[3,6]="Conor Gallagher";        seleccion[3,6]="Inglaterra"; posicion[3,6]="Mediocampista";  nivel[3,6]="Comun";   altura[3,6]=1.82; peso[3,6]=76;  dorsal[3,6]=8
-	nombreJugador[3,7]="Trent Alexander-Arnold"; seleccion[3,7]="Inglaterra"; posicion[3,7]="Mediocampista";  nivel[3,7]="Comun";   altura[3,7]=1.80; peso[3,7]=69;  dorsal[3,7]=2
-	nombreJugador[3,8]="Marcus Rashford";        seleccion[3,8]="Inglaterra"; posicion[3,8]="Delantero";      nivel[3,8]="Comun";   altura[3,8]=1.80; peso[3,8]=70;  dorsal[3,8]=11
-	nombreJugador[3,9]="Ollie Watkins";          seleccion[3,9]="Inglaterra"; posicion[3,9]="Delantero";      nivel[3,9]="Comun";   altura[3,9]=1.81; peso[3,9]=75;  dorsal[3,9]=21
-	nombreJugador[3,10]="Phil Foden";            seleccion[3,10]="Inglaterra"; posicion[3,10]="Mediocampista"; nivel[3,10]="Epico";  altura[3,10]=1.71; peso[3,10]=70; dorsal[3,10]=20
-	nombreJugador[3,11]="Bukayo Saka";           seleccion[3,11]="Inglaterra"; posicion[3,11]="Delantero";     nivel[3,11]="Epico";  altura[3,11]=1.78; peso[3,11]=72; dorsal[3,11]=7
-	nombreJugador[3,12]="Harry Kane";            seleccion[3,12]="Inglaterra"; posicion[3,12]="Delantero";     nivel[3,12]="Epico";  altura[3,12]=1.88; peso[3,12]=86; dorsal[3,12]=9
-	nombreJugador[3,13]="Cole Palmer";           seleccion[3,13]="Inglaterra"; posicion[3,13]="Mediocampista"; nivel[3,13]="Epico";  altura[3,13]=1.89; peso[3,13]=80; dorsal[3,13]=22
-	nombreJugador[3,14]="Jude Bellingham";       seleccion[3,14]="Inglaterra"; posicion[3,14]="Mediocampista"; nivel[3,14]="Leyenda"; altura[3,14]=1.86; peso[3,14]=83; dorsal[3,14]=10
+	nombreJugador[3,0]="Jordan Pickford";        seleccionJugador[3,0]="Inglaterra"; posicionJugador[3,0]="Portero";        nivelJugador[3,0]="Comun"
+	nombreJugador[3,1]="Reece James";            seleccionJugador[3,1]="Inglaterra"; posicionJugador[3,1]="Defensa";        nivelJugador[3,1]="Comun"
+	nombreJugador[3,2]="John Stones";            seleccionJugador[3,2]="Inglaterra"; posicionJugador[3,2]="Defensa";        nivelJugador[3,2]="Comun"
+	nombreJugador[3,3]="Marc Guehi";             seleccionJugador[3,3]="Inglaterra"; posicionJugador[3,3]="Defensa";        nivelJugador[3,3]="Comun"
+	nombreJugador[3,4]="Luke Shaw";              seleccionJugador[3,4]="Inglaterra"; posicionJugador[3,4]="Defensa";        nivelJugador[3,4]="Comun"
+	nombreJugador[3,5]="Declan Rice";            seleccionJugador[3,5]="Inglaterra"; posicionJugador[3,5]="Mediocampista";  nivelJugador[3,5]="Comun"
+	nombreJugador[3,6]="Conor Gallagher";        seleccionJugador[3,6]="Inglaterra"; posicionJugador[3,6]="Mediocampista";  nivelJugador[3,6]="Comun"
+	nombreJugador[3,7]="Trent Alexander-Arnold"; seleccionJugador[3,7]="Inglaterra"; posicionJugador[3,7]="Mediocampista";  nivelJugador[3,7]="Comun"
+	nombreJugador[3,8]="Marcus Rashford";        seleccionJugador[3,8]="Inglaterra"; posicionJugador[3,8]="Delantero";      nivelJugador[3,8]="Comun"
+	nombreJugador[3,9]="Ollie Watkins";          seleccionJugador[3,9]="Inglaterra"; posicionJugador[3,9]="Delantero";      nivelJugador[3,9]="Comun"
+	nombreJugador[3,10]="Phil Foden";            seleccionJugador[3,10]="Inglaterra"; posicionJugador[3,10]="Mediocampista"; nivelJugador[3,10]="Epico"
+	nombreJugador[3,11]="Bukayo Saka";           seleccionJugador[3,11]="Inglaterra"; posicionJugador[3,11]="Delantero";     nivelJugador[3,11]="Epico"
+	nombreJugador[3,12]="Harry Kane";            seleccionJugador[3,12]="Inglaterra"; posicionJugador[3,12]="Delantero";     nivelJugador[3,12]="Epico"
+	nombreJugador[3,13]="Cole Palmer";           seleccionJugador[3,13]="Inglaterra"; posicionJugador[3,13]="Mediocampista"; nivelJugador[3,13]="Epico"
+	nombreJugador[3,14]="Jude Bellingham";       seleccionJugador[3,14]="Inglaterra"; posicionJugador[3,14]="Mediocampista"; nivelJugador[3,14]="Leyenda"
 	
 	// ==========================================================
 	// SEL = 4 : ALEMANIA
 	// ==========================================================
-	nombreJugador[4,0]="Manuel Neuer";           seleccion[4,0]="Alemania"; posicion[4,0]="Portero";        nivel[4,0]="Comun";   altura[4,0]=1.93; peso[4,0]=92;  dorsal[4,0]=1
-	nombreJugador[4,1]="Joshua Kimmich";         seleccion[4,1]="Alemania"; posicion[4,1]="Defensa";        nivel[4,1]="Comun";   altura[4,1]=1.76; peso[4,1]=73;  dorsal[4,1]=6
-	nombreJugador[4,2]="Antonio Rudiger";        seleccion[4,2]="Alemania"; posicion[4,2]="Defensa";        nivel[4,2]="Comun";   altura[4,2]=1.90; peso[4,2]=85;  dorsal[4,2]=2
-	nombreJugador[4,3]="Jonathan Tah";           seleccion[4,3]="Alemania"; posicion[4,3]="Defensa";        nivel[4,3]="Comun";   altura[4,3]=1.95; peso[4,3]=91;  dorsal[4,3]=4
-	nombreJugador[4,4]="David Raum";             seleccion[4,4]="Alemania"; posicion[4,4]="Defensa";        nivel[4,4]="Comun";   altura[4,4]=1.80; peso[4,4]=74;  dorsal[4,4]=17
-	nombreJugador[4,5]="Leon Goretzka";          seleccion[4,5]="Alemania"; posicion[4,5]="Mediocampista";  nivel[4,5]="Comun";   altura[4,5]=1.89; peso[4,5]=88;  dorsal[4,5]=8
-	nombreJugador[4,6]="Ilkay Gundogan";         seleccion[4,6]="Alemania"; posicion[4,6]="Mediocampista";  nivel[4,6]="Comun";   altura[4,6]=1.80; peso[4,6]=80;  dorsal[4,6]=21
-	nombreJugador[4,7]="Leroy Sane";             seleccion[4,7]="Alemania"; posicion[4,7]="Delantero";      nivel[4,7]="Comun";   altura[4,7]=1.83; peso[4,7]=75;  dorsal[4,7]=19
-	nombreJugador[4,8]="Thomas Muller";          seleccion[4,8]="Alemania"; posicion[4,8]="Delantero";      nivel[4,8]="Comun";   altura[4,8]=1.86; peso[4,8]=79;  dorsal[4,8]=25
-	nombreJugador[4,9]="Kai Havertz";            seleccion[4,9]="Alemania"; posicion[4,9]="Delantero";      nivel[4,9]="Comun";   altura[4,9]=1.89; peso[4,9]=83;  dorsal[4,9]=7
-	nombreJugador[4,10]="Jamal Musiala";         seleccion[4,10]="Alemania"; posicion[4,10]="Mediocampista"; nivel[4,10]="Epico";  altura[4,10]=1.80; peso[4,10]=70; dorsal[4,10]=14
-	nombreJugador[4,11]="Serge Gnabry";          seleccion[4,11]="Alemania"; posicion[4,11]="Delantero";     nivel[4,11]="Epico";  altura[4,11]=1.75; peso[4,11]=76; dorsal[4,11]=10
-	nombreJugador[4,12]="Nico Schlotterbeck";    seleccion[4,12]="Alemania"; posicion[4,12]="Defensa";       nivel[4,12]="Epico";  altura[4,12]=1.91; peso[4,12]=83; dorsal[4,12]=3
-	nombreJugador[4,13]="Chris Fuhrich";         seleccion[4,13]="Alemania"; posicion[4,13]="Delantero";     nivel[4,13]="Epico";  altura[4,13]=1.76; peso[4,13]=72; dorsal[4,13]=15
-	nombreJugador[4,14]="Florian Wirtz";         seleccion[4,14]="Alemania"; posicion[4,14]="Mediocampista"; nivel[4,14]="Leyenda"; altura[4,14]=1.76; peso[4,14]=70; dorsal[4,14]=10
+	nombreJugador[4,0]="Manuel Neuer";           seleccionJugador[4,0]="Alemania"; posicionJugador[4,0]="Portero";        nivelJugador[4,0]="Comun"
+	nombreJugador[4,1]="Joshua Kimmich";         seleccionJugador[4,1]="Alemania"; posicionJugador[4,1]="Defensa";        nivelJugador[4,1]="Comun"
+	nombreJugador[4,2]="Antonio Rudiger";        seleccionJugador[4,2]="Alemania"; posicionJugador[4,2]="Defensa";        nivelJugador[4,2]="Comun"
+	nombreJugador[4,3]="Jonathan Tah";           seleccionJugador[4,3]="Alemania"; posicionJugador[4,3]="Defensa";        nivelJugador[4,3]="Comun"
+	nombreJugador[4,4]="David Raum";             seleccionJugador[4,4]="Alemania"; posicionJugador[4,4]="Defensa";        nivelJugador[4,4]="Comun"
+	nombreJugador[4,5]="Leon Goretzka";          seleccionJugador[4,5]="Alemania"; posicionJugador[4,5]="Mediocampista";  nivelJugador[4,5]="Comun"
+	nombreJugador[4,6]="Ilkay Gundogan";         seleccionJugador[4,6]="Alemania"; posicionJugador[4,6]="Mediocampista";  nivelJugador[4,6]="Comun"
+	nombreJugador[4,7]="Leroy Sane";             seleccionJugador[4,7]="Alemania"; posicionJugador[4,7]="Delantero";      nivelJugador[4,7]="Comun"
+	nombreJugador[4,8]="Thomas Muller";          seleccionJugador[4,8]="Alemania"; posicionJugador[4,8]="Delantero";      nivelJugador[4,8]="Comun"
+	nombreJugador[4,9]="Kai Havertz";            seleccionJugador[4,9]="Alemania"; posicionJugador[4,9]="Delantero";      nivelJugador[4,9]="Comun"
+	nombreJugador[4,10]="Jamal Musiala";         seleccionJugador[4,10]="Alemania"; posicionJugador[4,10]="Mediocampista"; nivelJugador[4,10]="Epico"
+	nombreJugador[4,11]="Serge Gnabry";          seleccionJugador[4,11]="Alemania"; posicionJugador[4,11]="Delantero";     nivelJugador[4,11]="Epico"
+	nombreJugador[4,12]="Nico Schlotterbeck";    seleccionJugador[4,12]="Alemania"; posicionJugador[4,12]="Defensa";       nivelJugador[4,12]="Epico"
+	nombreJugador[4,13]="Chris Fuhrich";         seleccionJugador[4,13]="Alemania"; posicionJugador[4,13]="Delantero";     nivelJugador[4,13]="Epico"
+	nombreJugador[4,14]="Florian Wirtz";         seleccionJugador[4,14]="Alemania"; posicionJugador[4,14]="Mediocampista"; nivelJugador[4,14]="Leyenda"
 	
 	// ==========================================================
 	// SEL = 5 : ESPANA
 	// ==========================================================
-	nombreJugador[5,0]="Unai Simon";             seleccion[5,0]="Espana"; posicion[5,0]="Portero";        nivel[5,0]="Comun";   altura[5,0]=1.92; peso[5,0]=84;  dorsal[5,0]=1
-	nombreJugador[5,1]="Dani Carvajal";          seleccion[5,1]="Espana"; posicion[5,1]="Defensa";        nivel[5,1]="Comun";   altura[5,1]=1.73; peso[5,1]=73;  dorsal[5,1]=2
-	nombreJugador[5,2]="Aymeric Laporte";        seleccion[5,2]="Espana"; posicion[5,2]="Defensa";        nivel[5,2]="Comun";   altura[5,2]=1.86; peso[5,2]=86;  dorsal[5,2]=14
-	nombreJugador[5,3]="Robin Le Normand";       seleccion[5,3]="Espana"; posicion[5,3]="Defensa";        nivel[5,3]="Comun";   altura[5,3]=1.87; peso[5,3]=83;  dorsal[5,3]=6
-	nombreJugador[5,4]="Marc Cucurella";         seleccion[5,4]="Espana"; posicion[5,4]="Defensa";        nivel[5,4]="Comun";   altura[5,4]=1.74; peso[5,4]=68;  dorsal[5,4]=24
-	nombreJugador[5,5]="Rodri";                  seleccion[5,5]="Espana"; posicion[5,5]="Mediocampista";  nivel[5,5]="Comun";   altura[5,5]=1.91; peso[5,5]=82;  dorsal[5,5]=16
-	nombreJugador[5,6]="Fabian Ruiz";            seleccion[5,6]="Espana"; posicion[5,6]="Mediocampista";  nivel[5,6]="Comun";   altura[5,6]=1.89; peso[5,6]=81;  dorsal[5,6]=8
-	nombreJugador[5,7]="Mikel Merino";           seleccion[5,7]="Espana"; posicion[5,7]="Mediocampista";  nivel[5,7]="Comun";   altura[5,7]=1.91; peso[5,7]=87;  dorsal[5,7]=22
-	nombreJugador[5,8]="Alvaro Morata";          seleccion[5,8]="Espana"; posicion[5,8]="Delantero";      nivel[5,8]="Comun";   altura[5,8]=1.87; peso[5,8]=83;  dorsal[5,8]=7
-	nombreJugador[5,9]="Ferran Torres";          seleccion[5,9]="Espana"; posicion[5,9]="Delantero";      nivel[5,9]="Comun";   altura[5,9]=1.84; peso[5,9]=76;  dorsal[5,9]=11
-	nombreJugador[5,10]="Lamine Yamal";          seleccion[5,10]="Espana"; posicion[5,10]="Delantero";     nivel[5,10]="Epico";  altura[5,10]=1.80; peso[5,10]=67; dorsal[5,10]=19
-	nombreJugador[5,11]="Nico Williams";         seleccion[5,11]="Espana"; posicion[5,11]="Delantero";     nivel[5,11]="Epico";  altura[5,11]=1.80; peso[5,11]=72; dorsal[5,11]=17
-	nombreJugador[5,12]="Dani Olmo";             seleccion[5,12]="Espana"; posicion[5,12]="Mediocampista"; nivel[5,12]="Epico";  altura[5,12]=1.79; peso[5,12]=74; dorsal[5,12]=10
-	nombreJugador[5,13]="Gavi";                  seleccion[5,13]="Espana"; posicion[5,13]="Mediocampista"; nivel[5,13]="Epico";  altura[5,13]=1.73; peso[5,13]=60; dorsal[5,13]=9
-	nombreJugador[5,14]="Pedri";                 seleccion[5,14]="Espana"; posicion[5,14]="Mediocampista"; nivel[5,14]="Leyenda"; altura[5,14]=1.74; peso[5,14]=63; dorsal[5,14]=26
+	nombreJugador[5,0]="Unai Simon";             seleccionJugador[5,0]="Espana"; posicionJugador[5,0]="Portero";        nivelJugador[5,0]="Comun"
+	nombreJugador[5,1]="Dani Carvajal";          seleccionJugador[5,1]="Espana"; posicionJugador[5,1]="Defensa";        nivelJugador[5,1]="Comun"
+	nombreJugador[5,2]="Aymeric Laporte";        seleccionJugador[5,2]="Espana"; posicionJugador[5,2]="Defensa";        nivelJugador[5,2]="Comun"
+	nombreJugador[5,3]="Robin Le Normand";       seleccionJugador[5,3]="Espana"; posicionJugador[5,3]="Defensa";        nivelJugador[5,3]="Comun"
+	nombreJugador[5,4]="Marc Cucurella";         seleccionJugador[5,4]="Espana"; posicionJugador[5,4]="Defensa";        nivelJugador[5,4]="Comun"
+	nombreJugador[5,5]="Rodri";                  seleccionJugador[5,5]="Espana"; posicionJugador[5,5]="Mediocampista";  nivelJugador[5,5]="Comun"
+	nombreJugador[5,6]="Fabian Ruiz";            seleccionJugador[5,6]="Espana"; posicionJugador[5,6]="Mediocampista";  nivelJugador[5,6]="Comun"
+	nombreJugador[5,7]="Mikel Merino";           seleccionJugador[5,7]="Espana"; posicionJugador[5,7]="Mediocampista";  nivelJugador[5,7]="Comun"
+	nombreJugador[5,8]="Alvaro Morata";          seleccionJugador[5,8]="Espana"; posicionJugador[5,8]="Delantero";      nivelJugador[5,8]="Comun"
+	nombreJugador[5,9]="Ferran Torres";          seleccionJugador[5,9]="Espana"; posicionJugador[5,9]="Delantero";      nivelJugador[5,9]="Comun"
+	nombreJugador[5,10]="Lamine Yamal";          seleccionJugador[5,10]="Espana"; posicionJugador[5,10]="Delantero";     nivelJugador[5,10]="Epico"
+	nombreJugador[5,11]="Nico Williams";         seleccionJugador[5,11]="Espana"; posicionJugador[5,11]="Delantero";     nivelJugador[5,11]="Epico"
+	nombreJugador[5,12]="Dani Olmo";             seleccionJugador[5,12]="Espana"; posicionJugador[5,12]="Mediocampista"; nivelJugador[5,12]="Epico"
+	nombreJugador[5,13]="Gavi";                  seleccionJugador[5,13]="Espana"; posicionJugador[5,13]="Mediocampista"; nivelJugador[5,13]="Epico"
+	nombreJugador[5,14]="Pedri";                 seleccionJugador[5,14]="Espana"; posicionJugador[5,14]="Mediocampista"; nivelJugador[5,14]="Leyenda"
 	
 	// ==========================================================
 	// SEL = 6 : PORTUGAL
 	// ==========================================================
-	nombreJugador[6,0]="Diogo Costa";            seleccion[6,0]="Portugal"; posicion[6,0]="Portero";        nivel[6,0]="Comun";   altura[6,0]=1.90; peso[6,0]=84;  dorsal[6,0]=1
-	nombreJugador[6,1]="Joao Cancelo";           seleccion[6,1]="Portugal"; posicion[6,1]="Defensa";        nivel[6,1]="Comun";   altura[6,1]=1.82; peso[6,1]=74;  dorsal[6,1]=20
-	nombreJugador[6,2]="Ruben Dias";             seleccion[6,2]="Portugal"; posicion[6,2]="Defensa";        nivel[6,2]="Comun";   altura[6,2]=1.87; peso[6,2]=76;  dorsal[6,2]=4
-	nombreJugador[6,3]="Pepe";                   seleccion[6,3]="Portugal"; posicion[6,3]="Defensa";        nivel[6,3]="Comun";   altura[6,3]=1.88; peso[6,3]=87;  dorsal[6,3]=3
-	nombreJugador[6,4]="Nuno Mendes";            seleccion[6,4]="Portugal"; posicion[6,4]="Defensa";        nivel[6,4]="Comun";   altura[6,4]=1.80; peso[6,4]=68;  dorsal[6,4]=19
-	nombreJugador[6,5]="Joao Palhinha";          seleccion[6,5]="Portugal"; posicion[6,5]="Mediocampista";  nivel[6,5]="Comun";   altura[6,5]=1.87; peso[6,5]=84;  dorsal[6,5]=26
-	nombreJugador[6,6]="Vitinha";                seleccion[6,6]="Portugal"; posicion[6,6]="Mediocampista";  nivel[6,6]="Comun";   altura[6,6]=1.72; peso[6,6]=65;  dorsal[6,6]=16
-	nombreJugador[6,7]="William Carvalho";       seleccion[6,7]="Portugal"; posicion[6,7]="Mediocampista";  nivel[6,7]="Comun";   altura[6,7]=1.87; peso[6,7]=81;  dorsal[6,7]=14
-	nombreJugador[6,8]="Pedro Neto";             seleccion[6,8]="Portugal"; posicion[6,8]="Delantero";      nivel[6,8]="Comun";   altura[6,8]=1.74; peso[6,8]=67;  dorsal[6,8]=7
-	nombreJugador[6,9]="Goncalo Ramos";          seleccion[6,9]="Portugal"; posicion[6,9]="Delantero";      nivel[6,9]="Comun";   altura[6,9]=1.88; peso[6,9]=84;  dorsal[6,9]=9
-	nombreJugador[6,10]="Bernardo Silva";        seleccion[6,10]="Portugal"; posicion[6,10]="Mediocampista"; nivel[6,10]="Epico";  altura[6,10]=1.73; peso[6,10]=64; dorsal[6,10]=10
-	nombreJugador[6,11]="Rafael Leao";           seleccion[6,11]="Portugal"; posicion[6,11]="Delantero";     nivel[6,11]="Epico";  altura[6,11]=1.88; peso[6,11]=79; dorsal[6,11]=11
-	nombreJugador[6,12]="Joao Felix";            seleccion[6,12]="Portugal"; posicion[6,12]="Delantero";     nivel[6,12]="Epico";  altura[6,12]=1.81; peso[6,12]=70; dorsal[6,12]=11
-	nombreJugador[6,13]="Ruben Neves";           seleccion[6,13]="Portugal"; posicion[6,13]="Mediocampista"; nivel[6,13]="Epico";  altura[6,13]=1.81; peso[6,13]=74; dorsal[6,13]=8
-	nombreJugador[6,14]="Cristiano Ronaldo";     seleccion[6,14]="Portugal"; posicion[6,14]="Delantero";     nivel[6,14]="Leyenda"; altura[6,14]=1.87; peso[6,14]=85; dorsal[6,14]=7
+	nombreJugador[6,0]="Diogo Costa";            seleccionJugador[6,0]="Portugal"; posicionJugador[6,0]="Portero";        nivelJugador[6,0]="Comun"
+	nombreJugador[6,1]="Joao Cancelo";           seleccionJugador[6,1]="Portugal"; posicionJugador[6,1]="Defensa";        nivelJugador[6,1]="Comun"
+	nombreJugador[6,2]="Ruben Dias";             seleccionJugador[6,2]="Portugal"; posicionJugador[6,2]="Defensa";        nivelJugador[6,2]="Comun"
+	nombreJugador[6,3]="Pepe";                   seleccionJugador[6,3]="Portugal"; posicionJugador[6,3]="Defensa";        nivelJugador[6,3]="Comun"
+	nombreJugador[6,4]="Nuno Mendes";            seleccionJugador[6,4]="Portugal"; posicionJugador[6,4]="Defensa";        nivelJugador[6,4]="Comun"
+	nombreJugador[6,5]="Joao Palhinha";          seleccionJugador[6,5]="Portugal"; posicionJugador[6,5]="Mediocampista";  nivelJugador[6,5]="Comun"
+	nombreJugador[6,6]="Vitinha";                seleccionJugador[6,6]="Portugal"; posicionJugador[6,6]="Mediocampista";  nivelJugador[6,6]="Comun"
+	nombreJugador[6,7]="William Carvalho";       seleccionJugador[6,7]="Portugal"; posicionJugador[6,7]="Mediocampista";  nivelJugador[6,7]="Comun"
+	nombreJugador[6,8]="Pedro Neto";             seleccionJugador[6,8]="Portugal"; posicionJugador[6,8]="Delantero";      nivelJugador[6,8]="Comun"
+	nombreJugador[6,9]="Goncalo Ramos";          seleccionJugador[6,9]="Portugal"; posicionJugador[6,9]="Delantero";      nivelJugador[6,9]="Comun"
+	nombreJugador[6,10]="Bernardo Silva";        seleccionJugador[6,10]="Portugal"; posicionJugador[6,10]="Mediocampista"; nivelJugador[6,10]="Epico"
+	nombreJugador[6,11]="Rafael Leao";           seleccionJugador[6,11]="Portugal"; posicionJugador[6,11]="Delantero";     nivelJugador[6,11]="Epico"
+	nombreJugador[6,12]="Joao Felix";            seleccionJugador[6,12]="Portugal"; posicionJugador[6,12]="Delantero";     nivelJugador[6,12]="Epico"
+	nombreJugador[6,13]="Ruben Neves";           seleccionJugador[6,13]="Portugal"; posicionJugador[6,13]="Mediocampista"; nivelJugador[6,13]="Epico"
+	nombreJugador[6,14]="Cristiano Ronaldo";     seleccionJugador[6,14]="Portugal"; posicionJugador[6,14]="Delantero";     nivelJugador[6,14]="Leyenda"
 	
 	// ==========================================================
 	// SEL = 7 : HOLANDA
 	// ==========================================================
-	nombreJugador[7,0]="Bart Verbruggen";        seleccion[7,0]="Holanda"; posicion[7,0]="Portero";        nivel[7,0]="Comun";   altura[7,0]=1.97; peso[7,0]=90;  dorsal[7,0]=1
-	nombreJugador[7,1]="Denzel Dumfries";        seleccion[7,1]="Holanda"; posicion[7,1]="Defensa";        nivel[7,1]="Comun";   altura[7,1]=1.88; peso[7,1]=85;  dorsal[7,1]=22
-	nombreJugador[7,2]="Stefan de Vrij";         seleccion[7,2]="Holanda"; posicion[7,2]="Defensa";        nivel[7,2]="Comun";   altura[7,2]=1.89; peso[7,2]=85;  dorsal[7,2]=6
-	nombreJugador[7,3]="Matthijs de Ligt";       seleccion[7,3]="Holanda"; posicion[7,3]="Defensa";        nivel[7,3]="Comun";   altura[7,3]=1.89; peso[7,3]=86;  dorsal[7,3]=4
-	nombreJugador[7,4]="Nathan Ake";             seleccion[7,4]="Holanda"; posicion[7,4]="Defensa";        nivel[7,4]="Comun";   altura[7,4]=1.80; peso[7,4]=75;  dorsal[7,4]=5
-	nombreJugador[7,5]="Tijjani Reijnders";      seleccion[7,5]="Holanda"; posicion[7,5]="Mediocampista";  nivel[7,5]="Comun";   altura[7,5]=1.84; peso[7,5]=74;  dorsal[7,5]=14
-	nombreJugador[7,6]="Teun Koopmeiners";       seleccion[7,6]="Holanda"; posicion[7,6]="Mediocampista";  nivel[7,6]="Comun";   altura[7,6]=1.83; peso[7,6]=75;  dorsal[7,6]=8
-	nombreJugador[7,7]="Davy Klaassen";          seleccion[7,7]="Holanda"; posicion[7,7]="Mediocampista";  nivel[7,7]="Comun";   altura[7,7]=1.82; peso[7,7]=76;  dorsal[7,7]=18
-	nombreJugador[7,8]="Cody Gakpo";             seleccion[7,8]="Holanda"; posicion[7,8]="Delantero";      nivel[7,8]="Comun";   altura[7,8]=1.89; peso[7,8]=80;  dorsal[7,8]=11
-	nombreJugador[7,9]="Wout Weghorst";          seleccion[7,9]="Holanda"; posicion[7,9]="Delantero";      nivel[7,9]="Comun";   altura[7,9]=1.97; peso[7,9]=92;  dorsal[7,9]=19
-	nombreJugador[7,10]="Xavi Simons";           seleccion[7,10]="Holanda"; posicion[7,10]="Mediocampista"; nivel[7,10]="Epico";  altura[7,10]=1.76; peso[7,10]=68; dorsal[7,10]=7
-	nombreJugador[7,11]="Memphis Depay";         seleccion[7,11]="Holanda"; posicion[7,11]="Delantero";     nivel[7,11]="Epico";  altura[7,11]=1.76; peso[7,11]=78; dorsal[7,11]=10
-	nombreJugador[7,12]="Donyell Malen";         seleccion[7,12]="Holanda"; posicion[7,12]="Delantero";     nivel[7,12]="Epico";  altura[7,12]=1.76; peso[7,12]=72; dorsal[7,12]=9
-	nombreJugador[7,13]="Ryan Gravenberch";      seleccion[7,13]="Holanda"; posicion[7,13]="Mediocampista"; nivel[7,13]="Epico";  altura[7,13]=1.90; peso[7,13]=83; dorsal[7,13]=20
-	nombreJugador[7,14]="Virgil van Dijk";       seleccion[7,14]="Holanda"; posicion[7,14]="Defensa";       nivel[7,14]="Leyenda"; altura[7,14]=1.93; peso[7,14]=92; dorsal[7,14]=4
+	nombreJugador[7,0]="Bart Verbruggen";        seleccionJugador[7,0]="Holanda"; posicionJugador[7,0]="Portero";        nivelJugador[7,0]="Comun"
+	nombreJugador[7,1]="Denzel Dumfries";        seleccionJugador[7,1]="Holanda"; posicionJugador[7,1]="Defensa";        nivelJugador[7,1]="Comun"
+	nombreJugador[7,2]="Stefan de Vrij";         seleccionJugador[7,2]="Holanda"; posicionJugador[7,2]="Defensa";        nivelJugador[7,2]="Comun"
+	nombreJugador[7,3]="Matthijs de Ligt";       seleccionJugador[7,3]="Holanda"; posicionJugador[7,3]="Defensa";        nivelJugador[7,3]="Comun"
+	nombreJugador[7,4]="Nathan Ake";             seleccionJugador[7,4]="Holanda"; posicionJugador[7,4]="Defensa";        nivelJugador[7,4]="Comun"
+	nombreJugador[7,5]="Tijjani Reijnders";      seleccionJugador[7,5]="Holanda"; posicionJugador[7,5]="Mediocampista";  nivelJugador[7,5]="Comun"
+	nombreJugador[7,6]="Teun Koopmeiners";       seleccionJugador[7,6]="Holanda"; posicionJugador[7,6]="Mediocampista";  nivelJugador[7,6]="Comun"
+	nombreJugador[7,7]="Davy Klaassen";          seleccionJugador[7,7]="Holanda"; posicionJugador[7,7]="Mediocampista";  nivelJugador[7,7]="Comun"
+	nombreJugador[7,8]="Cody Gakpo";             seleccionJugador[7,8]="Holanda"; posicionJugador[7,8]="Delantero";      nivelJugador[7,8]="Comun"
+	nombreJugador[7,9]="Wout Weghorst";          seleccionJugador[7,9]="Holanda"; posicionJugador[7,9]="Delantero";      nivelJugador[7,9]="Comun"
+	nombreJugador[7,10]="Xavi Simons";           seleccionJugador[7,10]="Holanda"; posicionJugador[7,10]="Mediocampista"; nivelJugador[7,10]="Epico"
+	nombreJugador[7,11]="Memphis Depay";         seleccionJugador[7,11]="Holanda"; posicionJugador[7,11]="Delantero";     nivelJugador[7,11]="Epico"
+	nombreJugador[7,12]="Donyell Malen";         seleccionJugador[7,12]="Holanda"; posicionJugador[7,12]="Delantero";     nivelJugador[7,12]="Epico"
+	nombreJugador[7,13]="Ryan Gravenberch";      seleccionJugador[7,13]="Holanda"; posicionJugador[7,13]="Mediocampista"; nivelJugador[7,13]="Epico"
+	nombreJugador[7,14]="Virgil van Dijk";       seleccionJugador[7,14]="Holanda"; posicionJugador[7,14]="Defensa";       nivelJugador[7,14]="Leyenda"
 	
 	// ==========================================================
 	// SEL = 8 : URUGUAY
 	// ==========================================================
-	nombreJugador[8,0]="Sergio Rochet";          seleccion[8,0]="Uruguay"; posicion[8,0]="Portero";        nivel[8,0]="Comun";   altura[8,0]=1.90; peso[8,0]=84;  dorsal[8,0]=1
-	nombreJugador[8,1]="Nahitan Nandez";         seleccion[8,1]="Uruguay"; posicion[8,1]="Defensa";        nivel[8,1]="Comun";   altura[8,1]=1.80; peso[8,1]=78;  dorsal[8,1]=3
-	nombreJugador[8,2]="Jose M. Gimenez";        seleccion[8,2]="Uruguay"; posicion[8,2]="Defensa";        nivel[8,2]="Comun";   altura[8,2]=1.87; peso[8,2]=81;  dorsal[8,2]=2
-	nombreJugador[8,3]="Ronald Araujo";          seleccion[8,3]="Uruguay"; posicion[8,3]="Defensa";        nivel[8,3]="Comun";   altura[8,3]=1.88; peso[8,3]=83;  dorsal[8,3]=4
-	nombreJugador[8,4]="Mathias Olivera";        seleccion[8,4]="Uruguay"; posicion[8,4]="Defensa";        nivel[8,4]="Comun";   altura[8,4]=1.80; peso[8,4]=74;  dorsal[8,4]=12
-	nombreJugador[8,5]="Rodrigo Bentancur";      seleccion[8,5]="Uruguay"; posicion[8,5]="Mediocampista";  nivel[8,5]="Comun";   altura[8,5]=1.87; peso[8,5]=78;  dorsal[8,5]=8
-	nombreJugador[8,6]="Manuel Ugarte";          seleccion[8,6]="Uruguay"; posicion[8,6]="Mediocampista";  nivel[8,6]="Comun";   altura[8,6]=1.82; peso[8,6]=76;  dorsal[8,6]=5
-	nombreJugador[8,7]="Nicolas De La Cruz";     seleccion[8,7]="Uruguay"; posicion[8,7]="Mediocampista";  nivel[8,7]="Comun";   altura[8,7]=1.73; peso[8,7]=68;  dorsal[8,7]=10
-	nombreJugador[8,8]="Facundo Pellistri";      seleccion[8,8]="Uruguay"; posicion[8,8]="Delantero";      nivel[8,8]="Comun";   altura[8,8]=1.73; peso[8,8]=70;  dorsal[8,8]=18
-	nombreJugador[8,9]="Luis Suarez";            seleccion[8,9]="Uruguay"; posicion[8,9]="Delantero";      nivel[8,9]="Comun";   altura[8,9]=1.82; peso[8,9]=86;  dorsal[8,9]=9
-	nombreJugador[8,10]="Federico Valverde";     seleccion[8,10]="Uruguay"; posicion[8,10]="Mediocampista"; nivel[8,10]="Epico";  altura[8,10]=1.82; peso[8,10]=77; dorsal[8,10]=15
-	nombreJugador[8,11]="Matias Vecino";         seleccion[8,11]="Uruguay"; posicion[8,11]="Mediocampista"; nivel[8,11]="Epico";  altura[8,11]=1.88; peso[8,11]=80; dorsal[8,11]=17
-	nombreJugador[8,12]="Edinson Cavani";        seleccion[8,12]="Uruguay"; posicion[8,12]="Delantero";     nivel[8,12]="Epico";  altura[8,12]=1.84; peso[8,12]=79; dorsal[8,12]=21
-	nombreJugador[8,13]="Giorgian De Arrascaeta";seleccion[8,13]="Uruguay"; posicion[8,13]="Mediocampista"; nivel[8,13]="Epico";  altura[8,13]=1.78; peso[8,13]=72; dorsal[8,13]=7
-	nombreJugador[8,14]="Darwin Nunez";          seleccion[8,14]="Uruguay"; posicion[8,14]="Delantero";     nivel[8,14]="Leyenda"; altura[8,14]=1.87; peso[8,14]=81; dorsal[8,14]=11
+	nombreJugador[8,0]="Sergio Rochet";          seleccionJugador[8,0]="Uruguay"; posicionJugador[8,0]="Portero";        nivelJugador[8,0]="Comun"
+	nombreJugador[8,1]="Nahitan Nandez";         seleccionJugador[8,1]="Uruguay"; posicionJugador[8,1]="Defensa";        nivelJugador[8,1]="Comun"
+	nombreJugador[8,2]="Jose M. Gimenez";        seleccionJugador[8,2]="Uruguay"; posicionJugador[8,2]="Defensa";        nivelJugador[8,2]="Comun"
+	nombreJugador[8,3]="Ronald Araujo";          seleccionJugador[8,3]="Uruguay"; posicionJugador[8,3]="Defensa";        nivelJugador[8,3]="Comun"
+	nombreJugador[8,4]="Mathias Olivera";        seleccionJugador[8,4]="Uruguay"; posicionJugador[8,4]="Defensa";        nivelJugador[8,4]="Comun"
+	nombreJugador[8,5]="Rodrigo Bentancur";      seleccionJugador[8,5]="Uruguay"; posicionJugador[8,5]="Mediocampista";  nivelJugador[8,5]="Comun"
+	nombreJugador[8,6]="Manuel Ugarte";          seleccionJugador[8,6]="Uruguay"; posicionJugador[8,6]="Mediocampista";  nivelJugador[8,6]="Comun"
+	nombreJugador[8,7]="Nicolas De La Cruz";     seleccionJugador[8,7]="Uruguay"; posicionJugador[8,7]="Mediocampista";  nivelJugador[8,7]="Comun"
+	nombreJugador[8,8]="Facundo Pellistri";      seleccionJugador[8,8]="Uruguay"; posicionJugador[8,8]="Delantero";      nivelJugador[8,8]="Comun"
+	nombreJugador[8,9]="Luis Suarez";            seleccionJugador[8,9]="Uruguay"; posicionJugador[8,9]="Delantero";      nivelJugador[8,9]="Comun"
+	nombreJugador[8,10]="Federico Valverde";     seleccionJugador[8,10]="Uruguay"; posicionJugador[8,10]="Mediocampista"; nivelJugador[8,10]="Epico"
+	nombreJugador[8,11]="Matias Vecino";         seleccionJugador[8,11]="Uruguay"; posicionJugador[8,11]="Mediocampista"; nivelJugador[8,11]="Epico"
+	nombreJugador[8,12]="Edinson Cavani";        seleccionJugador[8,12]="Uruguay"; posicionJugador[8,12]="Delantero";     nivelJugador[8,12]="Epico"
+	nombreJugador[8,13]="Giorgian De Arrascaeta";seleccionJugador[8,13]="Uruguay"; posicionJugador[8,13]="Mediocampista"; nivelJugador[8,13]="Epico"
+	nombreJugador[8,14]="Darwin Nunez";          seleccionJugador[8,14]="Uruguay"; posicionJugador[8,14]="Delantero";     nivelJugador[8,14]="Leyenda"
 	
 	// ==========================================================
 	// SEL = 9 : MEXICO
 	// ==========================================================
-	nombreJugador[9,0]="Guillermo Ochoa";        seleccion[9,0]="Mexico"; posicion[9,0]="Portero";        nivel[9,0]="Comun";   altura[9,0]=1.83; peso[9,0]=80;  dorsal[9,0]=13
-	nombreJugador[9,1]="Jorge Sanchez";          seleccion[9,1]="Mexico"; posicion[9,1]="Defensa";        nivel[9,1]="Comun";   altura[9,1]=1.74; peso[9,1]=73;  dorsal[9,1]=22
-	nombreJugador[9,2]="Cesar Montes";           seleccion[9,2]="Mexico"; posicion[9,2]="Defensa";        nivel[9,2]="Comun";   altura[9,2]=1.89; peso[9,2]=85;  dorsal[9,2]=3
-	nombreJugador[9,3]="Johan Vasquez";          seleccion[9,3]="Mexico"; posicion[9,3]="Defensa";        nivel[9,3]="Comun";   altura[9,3]=1.84; peso[9,3]=80;  dorsal[9,3]=4
-	nombreJugador[9,4]="Jesus Gallardo";         seleccion[9,4]="Mexico"; posicion[9,4]="Defensa";        nivel[9,4]="Comun";   altura[9,4]=1.73; peso[9,4]=70;  dorsal[9,4]=23
-	nombreJugador[9,5]="Edson Alvarez";          seleccion[9,5]="Mexico"; posicion[9,5]="Mediocampista";  nivel[9,5]="Comun";   altura[9,5]=1.87; peso[9,5]=82;  dorsal[9,5]=18
-	nombreJugador[9,6]="Erick Gutierrez";        seleccion[9,6]="Mexico"; posicion[9,6]="Mediocampista";  nivel[9,6]="Comun";   altura[9,6]=1.76; peso[9,6]=72;  dorsal[9,6]=8
-	nombreJugador[9,7]="Carlos Rodriguez";       seleccion[9,7]="Mexico"; posicion[9,7]="Mediocampista";  nivel[9,7]="Comun";   altura[9,7]=1.79; peso[9,7]=75;  dorsal[9,7]=7
-	nombreJugador[9,8]="Alexis Vega";            seleccion[9,8]="Mexico"; posicion[9,8]="Delantero";      nivel[9,8]="Comun";   altura[9,8]=1.68; peso[9,8]=68;  dorsal[9,8]=10
-	nombreJugador[9,9]="Raul Jimenez";           seleccion[9,9]="Mexico"; posicion[9,9]="Delantero";      nivel[9,9]="Comun";   altura[9,9]=1.88; peso[9,9]=83;  dorsal[9,9]=9
-	nombreJugador[9,10]="Hector Herrera";        seleccion[9,10]="Mexico"; posicion[9,10]="Mediocampista"; nivel[9,10]="Epico";  altura[9,10]=1.77; peso[9,10]=75; dorsal[9,10]=16
-	nombreJugador[9,11]="Chucky Lozano";         seleccion[9,11]="Mexico"; posicion[9,11]="Delantero";     nivel[9,11]="Epico";  altura[9,11]=1.74; peso[9,11]=70; dorsal[9,11]=22
-	nombreJugador[9,12]="Uriel Antuna";          seleccion[9,12]="Mexico"; posicion[9,12]="Delantero";     nivel[9,12]="Epico";  altura[9,12]=1.75; peso[9,12]=73; dorsal[9,12]=19
-	nombreJugador[9,13]="Roberto Alvarado";      seleccion[9,13]="Mexico"; posicion[9,13]="Mediocampista"; nivel[9,13]="Epico";  altura[9,13]=1.70; peso[9,13]=70; dorsal[9,13]=14
-	nombreJugador[9,14]="Hirving Lozano";        seleccion[9,14]="Mexico"; posicion[9,14]="Delantero";     nivel[9,14]="Leyenda"; altura[9,14]=1.74; peso[9,14]=70; dorsal[9,14]=22
-	
-	// Mostrar la carta
+	nombreJugador[9,0]="Guillermo Ochoa";        seleccionJugador[9,0]="Mexico"; posicionJugador[9,0]="Portero";        nivelJugador[9,0]="Comun"
+	nombreJugador[9,1]="Jorge Sanchez";          seleccionJugador[9,1]="Mexico"; posicionJugador[9,1]="Defensa";        nivelJugador[9,1]="Comun"
+	nombreJugador[9,2]="Cesar Montes";           seleccionJugador[9,2]="Mexico"; posicionJugador[9,2]="Defensa";        nivelJugador[9,2]="Comun"
+	nombreJugador[9,3]="Johan Vasquez";          seleccionJugador[9,3]="Mexico"; posicionJugador[9,3]="Defensa";        nivelJugador[9,3]="Comun"
+	nombreJugador[9,4]="Jesus Gallardo";         seleccionJugador[9,4]="Mexico"; posicionJugador[9,4]="Defensa";        nivelJugador[9,4]="Comun"
+	nombreJugador[9,5]="Edson Alvarez";          seleccionJugador[9,5]="Mexico"; posicionJugador[9,5]="Mediocampista";  nivelJugador[9,5]="Comun"
+	nombreJugador[9,6]="Erick Gutierrez";        seleccionJugador[9,6]="Mexico"; posicionJugador[9,6]="Mediocampista";  nivelJugador[9,6]="Comun"
+	nombreJugador[9,7]="Carlos Rodriguez";       seleccionJugador[9,7]="Mexico"; posicionJugador[9,7]="Mediocampista";  nivelJugador[9,7]="Comun"
+	nombreJugador[9,8]="Alexis Vega";            seleccionJugador[9,8]="Mexico"; posicionJugador[9,8]="Delantero";      nivelJugador[9,8]="Comun"
+	nombreJugador[9,9]="Raul Jimenez";           seleccionJugador[9,9]="Mexico"; posicionJugador[9,9]="Delantero";      nivelJugador[9,9]="Comun"
+	nombreJugador[9,10]="Hector Herrera";        seleccionJugador[9,10]="Mexico"; posicionJugador[9,10]="Mediocampista"; nivelJugador[9,10]="Epico"
+	nombreJugador[9,11]="Chucky Lozano";         seleccionJugador[9,11]="Mexico"; posicionJugador[9,11]="Delantero";     nivelJugador[9,11]="Epico"
+	nombreJugador[9,12]="Uriel Antuna";          seleccionJugador[9,12]="Mexico"; posicionJugador[9,12]="Delantero";     nivelJugador[9,12]="Epico"
+	nombreJugador[9,13]="Roberto Alvarado";      seleccionJugador[9,13]="Mexico"; posicionJugador[9,13]="Mediocampista"; nivelJugador[9,13]="Epico"
+	nombreJugador[9,14]="Hirving Lozano";        seleccionJugador[9,14]="Mexico"; posicionJugador[9,14]="Delantero";     nivelJugador[9,14]="Leyenda"
+FinSubProceso
+
+SubProceso listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, indice, contador_jugador, nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
+
 	Escribir "====================================="
 	Escribir "|           CARTA FIFA               |"
 	Escribir "====================================="
 	Escribir "| Nombre: ", nombreJugador[aleatorio1, aleatorio2]
-	Escribir "| Seleccion: ", seleccion[aleatorio1, aleatorio2]
-	Escribir "| Posicion: ", posicion[aleatorio1, aleatorio2]
-	Escribir "| Nivel: ", nivel[aleatorio1, aleatorio2]
-	Escribir "| Altura: ", altura[aleatorio1, aleatorio2]
-	Escribir "| Peso: ", peso[aleatorio1, aleatorio2]
-	Escribir "| Dorsal: ", dorsal[aleatorio1, aleatorio2]
+	Escribir "| Seleccion: ", seleccionJugador[aleatorio1, aleatorio2]
+	Escribir "| Posicion: ", posicionJugador[aleatorio1, aleatorio2]
+	Escribir "| Nivel: ", nivelJugador[aleatorio1, aleatorio2]
 	Escribir "====================================="
 	
-	n1 = aleatorio1
-	n2 = aleatorio2
 	nombre_n[indice] = nombreJugador[aleatorio1, aleatorio2]
-	seleccion_n[indice] = seleccion[aleatorio1, aleatorio2]
-	nivel_n[indice] = nivel[aleatorio1, aleatorio2]
-	contador_jugador[n1, n2] = contador_jugador[n1, n2] + 1
-	 
-FinFuncion
+	seleccion_n[indice] = seleccionJugador[aleatorio1, aleatorio2]
+	nivel_n[indice] = nivelJugador[aleatorio1, aleatorio2]
+	contador_jugador[aleatorio1, aleatorio2] = contador_jugador[aleatorio1, aleatorio2] + 1
+FinSubProceso
 
-SubProceso cartas(contador_cartas, contador_jugador)
+SubProceso cartas(contador_cartas, contador_jugador, nombre)
 	Limpiar Pantalla
 	Escribir "Album de: " + nombre
 	Escribir "Completado: " + ConvertirATexto(contador_cartas)+ " /100 Figuritas (" +  ConvertirATexto(contador_cartas)+ "%)";
@@ -325,7 +531,6 @@ SubProceso cartas(contador_cartas, contador_jugador)
 	Escribir "MEX 9   [" + ConvertirATexto(contador_jugador[9,0]) + "]   [" + ConvertirATexto(contador_jugador[9,1]) + "]   [" + ConvertirATexto(contador_jugador[9,2]) + "]   [" + ConvertirATexto(contador_jugador[9,3]) + "]   [" + ConvertirATexto(contador_jugador[9,4]) + "]   [" + ConvertirATexto(contador_jugador[9,5]) + "]   [" + ConvertirATexto(contador_jugador[9,6]) + "]   [" + ConvertirATexto(contador_jugador[9,7]) + "]   [" + ConvertirATexto(contador_jugador[9,8]) + "]   [" + ConvertirATexto(contador_jugador[9,9]) + "]   [" + ConvertirATexto(contador_jugador[9,10]) + "]   [" + ConvertirATexto(contador_jugador[9,11]) + "]   [" + ConvertirATexto(contador_jugador[9,12]) + "]   [" + ConvertirATexto(contador_jugador[9,13]) + "]   [" + ConvertirATexto(contador_jugador[9,14]) + "]"
 	Escribir "==================================================================================================="
 FinSubProceso
-
 
 SubProceso resumen_sobres(nombre_n, seleccion_n, nivel_n, contador)
 	Definir i, j Como Entero
@@ -385,10 +590,11 @@ SubProceso Pantalla_cargar(nada)
 	
 FinSubProceso
 
-Funcion primera_opcion(tipo_de_sobre, contador_jugador)
-	Definir aleatorio1, aleatorio2, i Como Entero
+Funcion primera_opcion(tipo_de_sobre, contador_jugador, nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
+	Definir aleatorio1, aleatorio2, i, contador Como Entero
 	Definir nombre_n, seleccion_n, nivel_n Como Cadena
 	Dimensionar nombre_n[4], seleccion_n[4], nivel_n[4]
+	contador = 0
 	
 	Pantalla_cargar(nada)
 	
@@ -402,7 +608,7 @@ Funcion primera_opcion(tipo_de_sobre, contador_jugador)
 		Para i <- 0 Hasta 3 Hacer
 			aleatorio1 <- Aleatorio(0,9)
 			aleatorio2 <- Aleatorio(0,9)
-			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i, contador_jugador)
+			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i, contador_jugador, nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
 			contador <- contador + 1
 			
 		FinPara
@@ -417,13 +623,13 @@ Funcion primera_opcion(tipo_de_sobre, contador_jugador)
 		Para i <- 0 Hasta 2 Hacer
 			aleatorio1 <- Aleatorio(0,9)
 			aleatorio2 <- Aleatorio(0,9)
-			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i, contador_jugador)
+			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i, contador_jugador, nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
 			contador <- contador + 1
 		FinPara
 		
 		aleatorio1 <- Aleatorio(0,9)
 		aleatorio2 <- Aleatorio(10,13)
-		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 3, contador_jugador)
+		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 3, contador_jugador, nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
 		contador <- contador + 1
 	FinSi
 	
@@ -436,19 +642,18 @@ Funcion primera_opcion(tipo_de_sobre, contador_jugador)
 		Para i <- 0 Hasta 1 Hacer
 			aleatorio1 <- Aleatorio(0,9)
 			aleatorio2 <- Aleatorio(0,9)
-			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i, contador_jugador)
+			listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, i, contador_jugador, nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
 			contador <- contador + 1
 		FinPara
 		aleatorio1 <- Aleatorio(0,9)
 		aleatorio2 <- Aleatorio(10,13)
-		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 2, contador_jugador)
+		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 2, contador_jugador, nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
 		contador <- contador + 1
 		aleatorio1 <- Aleatorio(0,9)
 		aleatorio2 <- 14
-		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 3, contador_jugador)
+		listado_jugadores(aleatorio1, aleatorio2, nombre_n, seleccion_n, nivel_n, 3, contador_jugador, nombreJugador, posicionJugador, nivelJugador, seleccionJugador)
 		contador <- contador + 1
 	FinSi
-	// Mostrar resumen
 	
 	resumen_sobres(nombre_n, seleccion_n, nivel_n, contador)
 FinFuncion
